@@ -1,6 +1,8 @@
 --デンジャラス・デストーイ・ナイトメアリー
 function c58468105.initial_effect(c)
-	aux.AddFusionProcFunFunRep(c,aux.FilterBoolFunction(Card.IsFusionSetCard,0xc3),aux.FilterBoolFunction(Card.IsFusionSetCard,0xa9),2,99,true)
+	--fusion material
+	c:EnableReviveLimit()
+	aux.AddFusionProcFunFunRep(c,aux.FilterBoolFunction(Card.IsFusionSetCard,0xc3),aux.FilterBoolFunction(Card.IsFusionSetCard,0xa9),2,2,true)
 	--atkup
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -70,8 +72,7 @@ function c58468105.discost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c58468105.discon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if not rp==1-tp or c:IsStatus(STATUS_BATTLE_DESTROYED) then return false end
-	if not re:IsHasProperty(EFFECT_FLAG_CARD_TARGET) then return end
+	if rp~=1-tp or not re:IsHasProperty(EFFECT_FLAG_CARD_TARGET) or c:IsStatus(STATUS_BATTLE_DESTROYED) then return false end
 	local tg=Duel.GetChainInfo(ev,CHAININFO_TARGET_CARDS)
 	return tg and tg:IsContains(c) and Duel.IsChainDisablable(ev)
 end

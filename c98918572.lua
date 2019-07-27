@@ -37,10 +37,11 @@ function c98918572.rcon(e,tp,eg,ep,ev,re,r,rp)
 		and Duel.IsExistingMatchingCard(c98918572.rfilter,tp,LOCATION_MZONE,0,1,rc,ev)
 end
 function c98918572.rop(e,tp,eg,ep,ev,re,r,rp)
-	local ct=bit.band(ev,0xffff)
+	local min=ev&0xffff
+	local max=(ev>>16)&0xffff
 	local rc=re:GetHandler()
-	local tg=Duel.SelectMatchingCard(tp,c98918572.rfilter,tp,LOCATION_MZONE,0,1,1,rc,ct)
-	tg:GetFirst():RemoveOverlayCard(tp,ct,ct,REASON_COST)
+	local tg=Duel.SelectMatchingCard(tp,c98918572.rfilter,tp,LOCATION_MZONE,0,1,1,rc,min)
+	return tg:GetFirst():RemoveOverlayCard(tp,min,max,REASON_EFFECT)
 end
 function c98918572.xyzfilter(c)
 	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:IsSetCard(0xf1)
@@ -51,7 +52,7 @@ function c98918572.xyztg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(98918572,1))
 	local g1=Duel.SelectTarget(tp,c98918572.xyzfilter,tp,LOCATION_MZONE,0,1,1,nil)
 	e:SetLabelObject(g1:GetFirst())
-	Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(98918572,2))
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
 	local g2=Duel.SelectTarget(tp,c98918572.xyzfilter,tp,LOCATION_MZONE,0,1,1,g1:GetFirst())
 end
 function c98918572.xyzop(e,tp,eg,ep,ev,re,r,rp)

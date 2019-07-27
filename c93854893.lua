@@ -47,7 +47,6 @@ function c93854893.tg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local op=Duel.SelectOption(tp,table.unpack(ops))+1
 	local sel=opval[op]
 	e:SetLabel(sel)
-	Duel.Hint(HINT_OPSELECTED,1-tp,aux.Stringid(93854893,sel+1))
 	if sel==0 then
 		e:SetCategory(CATEGORY_TOGRAVE)
 		Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,1-tp,LOCATION_ONFIELD)
@@ -67,7 +66,7 @@ function c93854893.op(e,tp,eg,ep,ev,re,r,rp)
 		end
 	else
 		if c:IsFacedown() or not c:IsRelateToEffect(e) then return end
-		Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(93854893,3))
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
 		local g=Duel.SelectMatchingCard(tp,c93854893.ofilter,tp,LOCATION_REMOVED,0,1,1,nil)
 		if g:GetCount()>0 then
 			Duel.Overlay(c,g)

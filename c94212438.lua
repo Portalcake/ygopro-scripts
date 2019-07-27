@@ -34,13 +34,16 @@ function c94212438.initial_effect(c)
 	local e5=Effect.CreateEffect(c)
 	e5:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e5:SetCode(EVENT_ADJUST)
-	e5:SetRange(LOCATION_SZONE)
+	e5:SetRange(LOCATION_ONFIELD)
 	e5:SetProperty(EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_CANNOT_DISABLE)
 	e5:SetOperation(c94212438.winop)
 	c:RegisterEffect(e5)
 end
 function c94212438.plcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp and e:GetHandler():GetFlagEffect(94212438)<4
+end
+function c94212438.plfilter(c,id)
+	return c:IsCode(id) and not c:IsForbidden()
 end
 function c94212438.plop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -51,7 +54,7 @@ function c94212438.plop(e,tp,eg,ep,ev,re,r,rp)
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,id,0,0x11,0,0,1,RACE_FIEND,ATTRIBUTE_DARK,POS_FACEUP,tp,181)
 	if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 and not res then return end
 	Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(94212438,1))
-	local g=Duel.SelectMatchingCard(tp,Card.IsCode,tp,LOCATION_DECK+LOCATION_HAND,0,1,1,nil,id)
+	local g=Duel.SelectMatchingCard(tp,c94212438.plfilter,tp,LOCATION_DECK+LOCATION_HAND,0,1,1,nil,id)
 	local tc=g:GetFirst()
 	if tc and res and Duel.SelectYesNo(tp,aux.Stringid(16625614,0)) then
 		tc:AddMonsterAttribute(TYPE_NORMAL,ATTRIBUTE_DARK,RACE_FIEND,1,0,0)
@@ -96,7 +99,7 @@ function c94212438.cfilter3(c)
 end
 function c94212438.winop(e,tp,eg,ep,ev,re,r,rp)
 	local WIN_REASON_DESTINY_BOARD=0x15
-	local g=Duel.GetMatchingGroup(c94212438.cfilter3,tp,LOCATION_ONFIELD,0,aux.ExceptThisCard(e))
+	local g=Duel.GetMatchingGroup(c94212438.cfilter3,tp,LOCATION_ONFIELD,0,e:GetHandler())
 	if g:GetClassCount(Card.GetCode)==4 then
 		Duel.Win(tp,WIN_REASON_DESTINY_BOARD)
 	end

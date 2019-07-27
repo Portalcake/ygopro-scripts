@@ -295,16 +295,30 @@ function Auxiliary.AddSynchroProcedure(c,f1,f2,minc,maxc)
 	c:RegisterEffect(e1)
 end
 function Auxiliary.SynCondition(f1,f2,minc,maxc)
-	return	function(e,c,smat,mg)
+	return	function(e,c,smat,mg,min,max)
 				if c==nil then return true end
 				if c:IsType(TYPE_PENDULUM) and c:IsFaceup() then return false end
+				local minc=minc
+				local maxc=maxc
+				if min then
+					if min>minc then minc=min end
+					if max<maxc then maxc=max end
+					if minc>maxc then return false end
+				end
 				if smat and smat:IsType(TYPE_TUNER) and (not f1 or f1(smat)) then
 					return Duel.CheckTunerMaterial(c,smat,f1,f2,minc,maxc,mg) end
 				return Duel.CheckSynchroMaterial(c,f1,f2,minc,maxc,smat,mg)
 			end
 end
 function Auxiliary.SynTarget(f1,f2,minc,maxc)
-	return	function(e,tp,eg,ep,ev,re,r,rp,chk,c,smat,mg)
+	return	function(e,tp,eg,ep,ev,re,r,rp,chk,c,smat,mg,min,max)
+				local minc=minc
+				local maxc=maxc
+				if min then
+					if min>minc then minc=min end
+					if max<maxc then maxc=max end
+					if minc>maxc then return false end
+				end
 				local g=nil
 				if smat and smat:IsType(TYPE_TUNER) and (not f1 or f1(smat)) then
 					g=Duel.SelectTunerMaterial(c:GetControler(),c,smat,f1,f2,minc,maxc,mg)
@@ -319,7 +333,7 @@ function Auxiliary.SynTarget(f1,f2,minc,maxc)
 			end
 end
 function Auxiliary.SynOperation(f1,f2,minct,maxc)
-	return	function(e,tp,eg,ep,ev,re,r,rp,c,smat,mg)
+	return	function(e,tp,eg,ep,ev,re,r,rp,c,smat,mg,min,max)
 				local g=e:GetLabelObject()
 				c:SetMaterial(g)
 				Duel.SendtoGrave(g,REASON_MATERIAL+REASON_SYNCHRO)
@@ -363,9 +377,16 @@ function Auxiliary.GetSynMaterials(tp,syncard)
 	return mg
 end
 function Auxiliary.SynMixCondition(f1,f2,f3,f4,minc,maxc,gc)
-	return	function(e,c,smat,mg1)
+	return	function(e,c,smat,mg1,min,max)
 				if c==nil then return true end
 				if c:IsType(TYPE_PENDULUM) and c:IsFaceup() then return false end
+				local minc=minc
+				local maxc=maxc
+				if min then
+					if min>minc then minc=min end
+					if max<maxc then maxc=max end
+					if minc>maxc then return false end
+				end
 				local tp=c:GetControler()
 				local mg
 				if mg1 then
@@ -378,7 +399,14 @@ function Auxiliary.SynMixCondition(f1,f2,f3,f4,minc,maxc,gc)
 			end
 end
 function Auxiliary.SynMixTarget(f1,f2,f3,f4,minc,maxc,gc)
-	return	function(e,tp,eg,ep,ev,re,r,rp,chk,c,smat,mg1)
+	return	function(e,tp,eg,ep,ev,re,r,rp,chk,c,smat,mg1,min,max)
+				local minc=minc
+				local maxc=maxc
+				if min then
+					if min>minc then minc=min end
+					if max<maxc then maxc=max end
+					if minc>maxc then return false end
+				end
 				local g=Group.CreateGroup()
 				local mg
 				if mg1 then
@@ -428,7 +456,7 @@ function Auxiliary.SynMixTarget(f1,f2,f3,f4,minc,maxc,gc)
 			end
 end
 function Auxiliary.SynMixOperation(f1,f2,f3,f4,minct,maxc,gc)
-	return	function(e,tp,eg,ep,ev,re,r,rp,c,smat,mg)
+	return	function(e,tp,eg,ep,ev,re,r,rp,c,smat,mg,min,max)
 				local g=e:GetLabelObject()
 				c:SetMaterial(g)
 				Duel.SendtoGrave(g,REASON_MATERIAL+REASON_SYNCHRO)
@@ -1795,9 +1823,9 @@ end
 function Auxiliary.LConditionFilter(c,f,lc)
 	return c:IsFaceup() and c:IsCanBeLinkMaterial(lc) and (not f or f(c))
 end
-function Auxiliary.LExtraFilter(c,f,lc)
+function Auxiliary.LExtraFilter(c,f,lc,tp)
 	if c:IsLocation(LOCATION_ONFIELD) and not c:IsFaceup() then return false end
-	return c:IsHasEffect(EFFECT_EXTRA_LINK_MATERIAL) and c:IsCanBeLinkMaterial(lc) and (not f or f(c))
+	return c:IsHasEffect(EFFECT_EXTRA_LINK_MATERIAL,tp) and c:IsCanBeLinkMaterial(lc) and (not f or f(c))
 end
 function Auxiliary.GetLinkCount(c)
 	if c:IsType(TYPE_LINK) and c:GetLink()>1 then
@@ -1806,47 +1834,92 @@ function Auxiliary.GetLinkCount(c)
 end
 function Auxiliary.GetLinkMaterials(tp,f,lc)
 	local mg=Duel.GetMatchingGroup(Auxiliary.LConditionFilter,tp,LOCATION_MZONE,0,nil,f,lc)
-	local mg2=Duel.GetMatchingGroup(Auxiliary.LExtraFilter,tp,LOCATION_HAND+LOCATION_SZONE,LOCATION_ONFIELD,nil,f,lc)
+	local mg2=Duel.GetMatchingGroup(Auxiliary.LExtraFilter,tp,LOCATION_HAND+LOCATION_SZONE,LOCATION_ONFIELD,nil,f,lc,tp)
 	if mg2:GetCount()>0 then mg:Merge(mg2) end
 	return mg
 end
-function Auxiliary.LCheckOtherMaterial(c,mg,lc)
-	local le={c:IsHasEffect(EFFECT_EXTRA_LINK_MATERIAL)}
+function Auxiliary.LCheckOtherMaterial(c,mg,lc,tp)
+	local le={c:IsHasEffect(EFFECT_EXTRA_LINK_MATERIAL,tp)}
 	for _,te in pairs(le) do
 		local f=te:GetValue()
 		if f and not f(te,lc,mg) then return false end
 	end
 	return true
 end
-function Auxiliary.LUncompatibilityFilter(c,sg,lc)
+function Auxiliary.LUncompatibilityFilter(c,sg,lc,tp)
 	local mg=sg:Filter(aux.TRUE,c)
-	return not Auxiliary.LCheckOtherMaterial(c,mg,lc)
+	return not Auxiliary.LCheckOtherMaterial(c,mg,lc,tp)
 end
-function Auxiliary.LCheckGoal(sg,tp,lc,gf)
+function Auxiliary.LCheckGoal(sg,tp,lc,gf,lmat)
 	return sg:CheckWithSumEqual(Auxiliary.GetLinkCount,lc:GetLink(),#sg,#sg)
 		and Duel.GetLocationCountFromEx(tp,tp,sg,lc)>0 and (not gf or gf(sg))
-		and not sg:IsExists(Auxiliary.LUncompatibilityFilter,1,nil,sg,lc)
+		and not sg:IsExists(Auxiliary.LUncompatibilityFilter,1,nil,sg,lc,tp)
+		and (not lmat or sg:IsContains(lmat))
 end
-function Auxiliary.LinkCondition(f,min,max,gf)
-	return	function(e,c)
+function Auxiliary.LExtraMaterialCount(mg,lc,tp)
+	for tc in aux.Next(mg) do
+		local le={tc:IsHasEffect(EFFECT_EXTRA_LINK_MATERIAL,tp)}
+		for _,te in pairs(le) do
+			local sg=mg:Filter(aux.TRUE,tc)
+			local f=te:GetValue()
+			if not f or f(te,lc,sg) then
+				te:UseCountLimit(tp)
+			end
+		end
+	end
+end
+function Auxiliary.LinkCondition(f,minc,maxc,gf)
+	return	function(e,c,og,lmat,min,max)
 				if c==nil then return true end
 				if c:IsType(TYPE_PENDULUM) and c:IsFaceup() then return false end
+				local minc=minc
+				local maxc=maxc
+				if min then
+					if min>minc then minc=min end
+					if max<maxc then maxc=max end
+					if minc>maxc then return false end
+				end
 				local tp=c:GetControler()
-				local mg=Auxiliary.GetLinkMaterials(tp,f,c)
+				local mg=nil
+				if og then
+					mg=og:Filter(Auxiliary.LConditionFilter,nil,f,c)
+				else
+					mg=Auxiliary.GetLinkMaterials(tp,f,c)
+				end
+				if lmat~=nil then
+					if not Auxiliary.LConditionFilter(lmat,f,c) then return false end
+					mg:AddCard(lmat)
+				end
 				local fg=Auxiliary.GetMustMaterialGroup(tp,EFFECT_MUST_BE_LMATERIAL)
 				if fg:IsExists(Auxiliary.MustMaterialCounterFilter,1,nil,mg) then return false end
 				Duel.SetSelectedCard(fg)
-				return mg:CheckSubGroup(Auxiliary.LCheckGoal,min,max,tp,c,gf)
+				return mg:CheckSubGroup(Auxiliary.LCheckGoal,minc,maxc,tp,c,gf,lmat)
 			end
 end
-function Auxiliary.LinkTarget(f,min,max,gf)
-	return	function(e,tp,eg,ep,ev,re,r,rp,chk,c)
-				local mg=Auxiliary.GetLinkMaterials(tp,f,c)
+function Auxiliary.LinkTarget(f,minc,maxc,gf)
+	return	function(e,tp,eg,ep,ev,re,r,rp,chk,c,og,lmat,min,max)
+				local minc=minc
+				local maxc=maxc
+				if min then
+					if min>minc then minc=min end
+					if max<maxc then maxc=max end
+					if minc>maxc then return false end
+				end
+				local mg=nil
+				if og then
+					mg=og:Filter(Auxiliary.LConditionFilter,nil,f,c)
+				else
+					mg=Auxiliary.GetLinkMaterials(tp,f,c)
+				end
+				if lmat~=nil then
+					if not Auxiliary.LConditionFilter(lmat,f,c) then return false end
+					mg:AddCard(lmat)
+				end
 				local fg=Auxiliary.GetMustMaterialGroup(tp,EFFECT_MUST_BE_LMATERIAL)
 				Duel.SetSelectedCard(fg)
 				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_LMATERIAL)
 				local cancel=Duel.GetCurrentChain()==0
-				local sg=mg:SelectSubGroup(tp,Auxiliary.LCheckGoal,cancel,min,max,tp,c,gf)
+				local sg=mg:SelectSubGroup(tp,Auxiliary.LCheckGoal,cancel,minc,maxc,tp,c,gf,lmat)
 				if sg then
 					sg:KeepAlive()
 					e:SetLabelObject(sg)
@@ -1854,10 +1927,11 @@ function Auxiliary.LinkTarget(f,min,max,gf)
 				else return false end
 			end
 end
-function Auxiliary.LinkOperation(f,min,max,gf)
-	return	function(e,tp,eg,ep,ev,re,r,rp,c,smat,mg)
+function Auxiliary.LinkOperation(f,minc,maxc,gf)
+	return	function(e,tp,eg,ep,ev,re,r,rp,c,og,lmat,min,max)
 				local g=e:GetLabelObject()
 				c:SetMaterial(g)
+				Auxiliary.LExtraMaterialCount(g,c,tp)
 				Duel.SendtoGrave(g,REASON_MATERIAL+REASON_LINK)
 				g:DeleteGroup()
 			end
@@ -1886,6 +1960,7 @@ function Auxiliary.IsCounterAdded(c,counter)
 	end
 	return false
 end
+--return the column of card c (from the viewpoint of p)
 function Auxiliary.GetColumn(c,p)
 	local seq=c:GetSequence()
 	if c:IsLocation(LOCATION_MZONE) then
@@ -1895,10 +1970,15 @@ function Auxiliary.GetColumn(c,p)
 	else return nil end
 	if c:IsControler(p or 0) then return seq else return 4-seq end
 end
---return the column of seq
+--return the column of monster zone seq (from the viewpoint of controller)
 function Auxiliary.MZoneSequence(seq)
 	if seq==5 then return 1 end
 	if seq==6 then return 3 end
+	return seq
+end
+--return the column of spell/trap zone seq (from the viewpoint of controller)
+function Auxiliary.SZoneSequence(seq)
+	if seq>4 then return nil end
 	return seq
 end
 --card effect disable filter(target)
