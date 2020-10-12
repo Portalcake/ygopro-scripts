@@ -40,8 +40,8 @@ function c1322368.spop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=g:GetFirst()
 	local opt=e:GetLabel()
 	if (opt==0 and tc:IsType(TYPE_MONSTER)) or (opt==1 and tc:IsType(TYPE_SPELL)) or (opt==2 and tc:IsType(TYPE_TRAP)) then
-		local zone=e:GetHandler():GetLinkedZone()
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+		local zone=e:GetHandler():GetLinkedZone(tp)
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_OPERATECARD)
 		local sg=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c1322368.spfilter),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,e,tp,zone)
 		local sc=sg:GetFirst()
 		if sc then

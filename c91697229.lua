@@ -6,7 +6,7 @@ function c91697229.initial_effect(c)
 	e1:SetDescription(aux.Stringid(91697229,0))
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_SPSUMMON_PROC)
-	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_SPSUM_PARAM)
+	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_SPSUM_PARAM)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetTargetRange(POS_FACEUP_DEFENSE,1)
 	e1:SetCondition(c91697229.spcon)
@@ -33,9 +33,8 @@ function c91697229.initial_effect(c)
 	c:RegisterEffect(e5)
 	--damage
 	local e6=Effect.CreateEffect(c)
-	e6:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_SINGLE)
-	e6:SetCode(EVENT_PRE_BATTLE_DAMAGE)
-	e6:SetOperation(c91697229.damop)
+	e6:SetType(EFFECT_TYPE_SINGLE)
+	e6:SetCode(EFFECT_BOTH_BATTLE_DAMAGE)
 	c:RegisterEffect(e6)
 end
 function c91697229.spcon(e,c)
@@ -63,7 +62,4 @@ function c91697229.posop(e,tp,eg,ep,ev,re,r,rp)
 	if g:GetCount()>0 then
 		Duel.ChangePosition(g,POS_FACEUP_ATTACK)
 	end
-end
-function c91697229.damop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.ChangeBattleDamage(1-ep,ev,false)
 end

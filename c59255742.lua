@@ -3,7 +3,7 @@ function c59255742.initial_effect(c)
 	Duel.EnableGlobalFlag(GLOBALFLAG_BRAINWASHING_CHECK)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcFunRep(c,c59255742.ffilter,2,false)
+	aux.AddFusionProcFunRep(c,c59255742.ffilter,2,true)
 	--special summon
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -42,7 +42,7 @@ function c59255742.initial_effect(c)
 	e4:SetOperation(c59255742.ctop)
 	c:RegisterEffect(e4)
 end
-c59255742.miracle_synchro_fusion=true
+c59255742.material_type=TYPE_SYNCHRO
 function c59255742.ffilter(c)
 	return c:IsFusionAttribute(ATTRIBUTE_EARTH) and c:IsRace(RACE_WARRIOR) and c:IsFusionType(TYPE_SYNCHRO)
 end
@@ -125,6 +125,7 @@ function c59255742.ctop(e,tp,eg,ep,ev,re,r,rp)
 	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_REMOVE_BRAINWASHING)
+	e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
 	e1:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
 	e1:SetTarget(aux.TargetEqualFunction(Card.GetFlagEffect,1,59255742))
 	e1:SetLabelObject(tg)

@@ -5,7 +5,7 @@ function c38522377.initial_effect(c)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_SPSUMMON_PROC)
-	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetCondition(c38522377.spcon)
 	c:RegisterEffect(e1)
@@ -53,15 +53,8 @@ function c38522377.atkop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.SendtoGrave(g,REASON_EFFECT)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) or c:IsFacedown() then return end
-	local og=Duel.GetOperatedGroup()
-	local tc=og:GetFirst()
-	local atk=0
-	while tc do
-		local oatk=tc:GetTextAttack()
-		if oatk<0 then oatk=0 end
-		atk=atk+oatk
-		tc=og:GetNext()
-	end
+	local og=Duel.GetOperatedGroup():Filter(Card.IsLocation,nil,LOCATION_GRAVE)
+	local atk=og:GetSum(Card.GetBaseAttack)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetCode(EFFECT_SET_ATTACK_FINAL)

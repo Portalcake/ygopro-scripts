@@ -7,13 +7,10 @@ function c12940613.initial_effect(c)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DAMAGE_STEP)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetHintTiming(TIMING_DAMAGE_STEP)
-	e1:SetCondition(c12940613.condition)
+	e1:SetCondition(aux.dscon)
 	e1:SetTarget(c12940613.target)
 	e1:SetOperation(c12940613.activate)
 	c:RegisterEffect(e1)
-end
-function c12940613.condition(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated()
 end
 function c12940613.filter(c)
 	return c:IsFaceup() and c:IsSetCard(0x71)
@@ -56,6 +53,8 @@ function c12940613.activate(e,tp,eg,ep,ev,re,r,rp)
 	if dg:GetCount()~=0 and Duel.SelectYesNo(tp,aux.Stringid(12940613,0)) then
 		Duel.BreakEffect()
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-		Duel.SendtoDeck(dg:Select(tp,1,1,nil),nil,2,REASON_EFFECT)
+		local sg=dg:Select(tp,1,1,nil)
+		Duel.HintSelection(sg)
+		Duel.SendtoDeck(sg,nil,2,REASON_EFFECT)
 	end
 end

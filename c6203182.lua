@@ -17,8 +17,8 @@ function c6203182.initial_effect(c)
 	c:RegisterEffect(e2)
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_EQUIP)
-	e3:SetCode(EFFECT_CANNOT_SELECT_BATTLE_TARGET)
-	e3:SetValue(aux.ctg)
+	e3:SetCode(EFFECT_CANNOT_BE_BATTLE_TARGET)
+	e3:SetValue(aux.imval1)
 	c:RegisterEffect(e3)
 	--control
 	local e4=Effect.CreateEffect(c)
@@ -72,8 +72,8 @@ function c6203182.operation(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetCode(EFFECT_DISABLE_EFFECT)
 		e2:SetReset(RESET_EVENT+RESETS_STANDARD)
 		tc:RegisterEffect(e2)
-		Duel.SpecialSummonComplete()
 	end
+	Duel.SpecialSummonComplete()
 end
 function c6203182.eqlimit(e,c)
 	return e:GetOwner()==c

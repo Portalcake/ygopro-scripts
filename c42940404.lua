@@ -1,5 +1,6 @@
 --マシンナーズ・ギアフレーム
 function c42940404.initial_effect(c)
+	aux.EnableUnionAttribute(c,c42940404.eqlimit)
 	--equip
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(42940404,0))
@@ -16,25 +17,9 @@ function c42940404.initial_effect(c)
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_SZONE)
-	e2:SetCondition(aux.IsUnionState)
 	e2:SetTarget(c42940404.sptg)
 	e2:SetOperation(c42940404.spop)
 	c:RegisterEffect(e2)
-	--destroy sub
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_EQUIP)
-	e3:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
-	e3:SetCode(EFFECT_DESTROY_SUBSTITUTE)
-	e3:SetCondition(aux.IsUnionState)
-	e3:SetValue(1)
-	c:RegisterEffect(e3)
-	--eqlimit
-	local e4=Effect.CreateEffect(c)
-	e4:SetType(EFFECT_TYPE_SINGLE)
-	e4:SetCode(EFFECT_EQUIP_LIMIT)
-	e4:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-	e4:SetValue(aux.TargetBoolFunction(Card.IsRace,RACE_MACHINE))
-	c:RegisterEffect(e4)
 	--search
 	local e5=Effect.CreateEffect(c)
 	e5:SetDescription(aux.Stringid(42940404,2))
@@ -45,9 +30,12 @@ function c42940404.initial_effect(c)
 	e5:SetOperation(c42940404.sop)
 	c:RegisterEffect(e5)
 end
-c42940404.old_union=true
+function c42940404.eqlimit(e,c)
+	return c:IsRace(RACE_MACHINE) or e:GetHandler():GetEquipTarget()==c
+end
 function c42940404.filter(c)
-	return c:IsFaceup() and c:IsRace(RACE_MACHINE) and c:GetUnionCount()==0
+	local ct1,ct2=c:GetUnionCount()
+	return c:IsFaceup() and c:IsRace(RACE_MACHINE) and ct2==0
 end
 function c42940404.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and c42940404.filter(chkc) and chkc~=e:GetHandler() end
@@ -78,7 +66,7 @@ end
 function c42940404.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) then return end
-	Duel.SpecialSummon(c,0,tp,tp,true,false,POS_FACEUP_ATTACK)
+	Duel.SpecialSummon(c,0,tp,tp,true,false,POS_FACEUP)
 end
 function c42940404.sfilter(c)
 	return c:IsSetCard(0x36) and c:GetCode()~=42940404 and c:IsType(TYPE_MONSTER) and c:IsAbleToHand()

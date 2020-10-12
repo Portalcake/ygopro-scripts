@@ -5,7 +5,7 @@ function c13032689.initial_effect(c)
 	e1:SetCategory(CATEGORY_EQUIP)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_CONTINUOUS_TARGET)
 	e1:SetTarget(c13032689.target)
 	e1:SetOperation(c13032689.operation)
 	c:RegisterEffect(e1)
@@ -55,7 +55,7 @@ function c13032689.atkval(e,c)
 	return c:GetRank()*200
 end
 function c13032689.rcon(e,tp,eg,ep,ev,re,r,rp)
-	return bit.band(r,REASON_COST)~=0 and re:IsHasType(0x7e0) and re:IsActiveType(TYPE_XYZ)
+	return bit.band(r,REASON_COST)~=0 and re:IsActivated() and re:IsActiveType(TYPE_XYZ)
 		and ep==e:GetOwnerPlayer() and e:GetHandler():GetEquipTarget()==re:GetHandler() and re:GetHandler():GetOverlayCount()>=ev-1
 end
 function c13032689.rop(e,tp,eg,ep,ev,re,r,rp)

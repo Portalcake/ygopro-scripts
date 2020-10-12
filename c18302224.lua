@@ -1,5 +1,6 @@
 --リバース・オブ・ネオス
 function c18302224.initial_effect(c)
+	aux.AddCodeList(c,89943723)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -10,7 +11,6 @@ function c18302224.initial_effect(c)
 	e1:SetOperation(c18302224.activate)
 	c:RegisterEffect(e1)
 end
-c18302224.card_code_list={89943723}
 function c18302224.cfilter(c,tp)
 	return c:IsPreviousLocation(LOCATION_MZONE) and c:GetPreviousControler()==tp
 		and c:IsPreviousPosition(POS_FACEUP) and c:IsSetCard(0x9) and c:IsType(TYPE_FUSION)
@@ -47,8 +47,8 @@ function c18302224.activate(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 		e2:SetCountLimit(1)
 		tc:RegisterEffect(e2,true)
-		Duel.SpecialSummonComplete()
 	end
+	Duel.SpecialSummonComplete()
 end
 function c18302224.desop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Destroy(e:GetHandler(),REASON_EFFECT)

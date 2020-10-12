@@ -21,6 +21,7 @@ function c42421606.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 c42421606.xyz_number=85
+c42421606.toss_dice=true
 function c42421606.efcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
 	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
@@ -32,7 +33,7 @@ end
 function c42421606.efop(e,tp,eg,ep,ev,re,r,rp)
 	local dc=Duel.TossDice(tp,1)
 	if dc==1 then
-		Duel.SetLP(tp,Duel.GetLP(tp)/2)
+		Duel.SetLP(tp,math.ceil(Duel.GetLP(tp)/2))
 	elseif dc==2 then
 		Duel.Draw(tp,1,REASON_EFFECT)
 	elseif dc==3 then

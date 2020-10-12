@@ -48,6 +48,9 @@ function c21140872.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 c21140872.material_setcode=0x3b
+function c21140872.red_eyes_fusion_check(tp,sg,fc)
+	return aux.gffcheck(sg,Card.IsFusionCode,74677422,Card.IsRace,RACE_WARRIOR)
+end
 function c21140872.eqcon(e)
 	return Duel.GetAttacker():IsSetCard(0x3b)
 end
@@ -64,10 +67,8 @@ function c21140872.eqtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function c21140872.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if c:IsFacedown() or not c:IsRelateToEffect(e) then return end
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
-		Duel.Equip(tp,tc,c,true)
+	if tc:IsRelateToEffect(e) and Duel.Equip(tp,tc,c) then
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_EQUIP_LIMIT)
@@ -96,7 +97,7 @@ function c21140872.ngcon(e,tp,eg,ep,ev,re,r,rp)
 	return g and g:IsExists(c21140872.ngcfilter,1,nil,tp) and Duel.IsChainNegatable(ev)
 end
 function c21140872.ngfilter(c)
-	return c:IsType(TYPE_EQUIP) and c:IsAbleToGraveAsCost()
+	return c:IsType(TYPE_EQUIP) and (c:IsFaceup() or c:GetEquipTarget()) and c:IsAbleToGraveAsCost()
 end
 function c21140872.ngcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c21140872.ngfilter,tp,LOCATION_SZONE,0,1,nil) end

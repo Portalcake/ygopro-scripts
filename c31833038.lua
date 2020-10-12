@@ -21,7 +21,7 @@ function c31833038.initial_effect(c)
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DAMAGE_STEP)
 	e3:SetHintTiming(TIMING_DAMAGE_STEP+TIMING_END_PHASE)
 	e3:SetCountLimit(1)
-	e3:SetCondition(c31833038.atkcon)
+	e3:SetCondition(aux.dscon)
 	e3:SetTarget(c31833038.atktg)
 	e3:SetOperation(c31833038.atkop)
 	c:RegisterEffect(e3)
@@ -37,9 +37,6 @@ function c31833038.initial_effect(c)
 end
 function c31833038.efilter1(e,re,rp)
 	return re:IsActiveType(TYPE_MONSTER)
-end
-function c31833038.atkcon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated()
 end
 function c31833038.atktg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsFaceup() end
@@ -74,13 +71,14 @@ function c31833038.cttg(e,tp,eg,ep,ev,re,r,rp,chk)
 		local zone=bit.band(c:GetLinkedZone(),0x1f)
 		return Duel.GetAttacker()==c and tc and tc:IsControlerCanBeChanged(false,zone)
 	end
+	Duel.SetTargetCard(tc)
 	Duel.SetOperationInfo(0,CATEGORY_CONTROL,tc,1,0,0)
 end
 function c31833038.ctop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) then return end
-	local tc=Duel.GetAttackTarget()
-	if tc then
+	local tc=Duel.GetFirstTarget()
+	if tc:IsRelateToEffect(e) then
 		local zone=bit.band(c:GetLinkedZone(),0x1f)
 		if Duel.GetControl(tc,tp,0,0,zone)~=0 then
 			tc:RegisterFlagEffect(31833038,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,2)

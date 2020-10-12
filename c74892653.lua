@@ -38,12 +38,30 @@ function c74892653.initial_effect(c)
 	e3:SetOperation(c74892653.scop)
 	c:RegisterEffect(e3)
 end
+c74892653.material_type=TYPE_SYNCHRO
 function c74892653.condition(e,tp,eg,ep,ev,re,r,rp)
 	return tp~=ep and Duel.GetCurrentChain()==0
 end
+function c74892653.excostfilter(c,tp)
+	return c:IsAbleToRemoveAsCost() and c:IsHasEffect(84012625,tp)
+end
 function c74892653.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsReleasable() end
-	Duel.Release(e:GetHandler(),REASON_COST)
+	local g=Duel.GetMatchingGroup(c74892653.excostfilter,tp,LOCATION_GRAVE,0,nil,tp)
+	if e:GetHandler():IsReleasable() then g:AddCard(e:GetHandler()) end
+	if chk==0 then return #g>0 end
+	local tc
+	if #g>1 then
+		Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(84012625,0))
+		tc=g:Select(tp,1,1,nil):GetFirst()
+	else
+		tc=g:GetFirst()
+	end
+	local te=tc:IsHasEffect(84012625,tp)
+	if te then
+		Duel.Remove(tc,POS_FACEUP,REASON_COST+REASON_REPLACE)
+	else
+		Duel.Release(tc,REASON_COST)
+	end
 end
 function c74892653.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
@@ -73,16 +91,15 @@ function c74892653.sccon(e,tp,eg,ep,ev,re,r,rp)
 end
 function c74892653.filter(c,e,tp)
 	return c:IsSetCard(0x66) and c:IsLevelBelow(8) and c:IsType(TYPE_SYNCHRO)
-		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_SYNCHRO,tp,false,false)
+		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_SYNCHRO,tp,false,false) and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
 end
 function c74892653.sctg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetLocationCountFromEx(tp)>0
-		and aux.MustMaterialCheck(nil,tp,EFFECT_MUST_BE_SMATERIAL)
+	if chk==0 then return aux.MustMaterialCheck(nil,tp,EFFECT_MUST_BE_SMATERIAL)
 		and Duel.IsExistingMatchingCard(c74892653.filter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c74892653.scop(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCountFromEx(tp)<=0 or not aux.MustMaterialCheck(nil,tp,EFFECT_MUST_BE_SMATERIAL) then return end
+	if not aux.MustMaterialCheck(nil,tp,EFFECT_MUST_BE_SMATERIAL) then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c74892653.filter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
 	local tc=g:GetFirst()

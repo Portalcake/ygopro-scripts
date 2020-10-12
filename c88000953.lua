@@ -56,17 +56,15 @@ function c88000953.desfilter(c,g)
 	return not ec or not g:IsContains(ec)
 end
 function c88000953.fselect(g,tp)
-	if Duel.IsExistingMatchingCard(c88000953.desfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,g:GetCount(),g,g) then
-		Duel.SetSelectedCard(g)
-		return Duel.CheckReleaseGroup(tp,nil,0,nil)
-	else return false end
+	return Duel.IsExistingMatchingCard(c88000953.desfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,g:GetCount(),g,g)
+		and Duel.CheckReleaseGroup(tp,aux.IsInGroup,#g,nil,g)
 end
 function c88000953.descost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local lg=e:GetHandler():GetLinkedGroup()
 	if chk==0 then return Duel.CheckReleaseGroup(tp,c88000953.costfilter,1,nil,tp,lg) end
 	local rg=Duel.GetReleaseGroup(tp):Filter(c88000953.costfilter,nil,tp,lg)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
-	local sg=rg:SelectSubGroup(tp,c88000953.fselect,false,1,99,tp)
+	local sg=rg:SelectSubGroup(tp,c88000953.fselect,false,1,rg:GetCount(),tp)
 	local ct=Duel.Release(sg,REASON_COST)
 	e:SetLabel(ct)
 end

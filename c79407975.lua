@@ -11,7 +11,7 @@ function c79407975.initial_effect(c)
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetCode(EFFECT_SPSUMMON_PROC)
-	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e2:SetRange(LOCATION_HAND)
 	e2:SetCondition(c79407975.spcon)
 	e2:SetOperation(c79407975.spop)
@@ -38,15 +38,10 @@ function c79407975.spcon(e,c)
 end
 function c79407975.spop(e,tp,eg,ep,ev,re,r,rp,c)
 	local g=Duel.GetMatchingGroup(c79407975.spfilter,tp,LOCATION_GRAVE,0,nil)
-	local rg=Group.CreateGroup()
-	for i=1,7 do
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local tc=g:Select(tp,1,1,nil):GetFirst()
-		if tc then
-			rg:AddCard(tc)
-			g:Remove(Card.IsCode,nil,tc:GetCode())
-		end
-	end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+	aux.GCheckAdditional=aux.dncheck
+	local rg=g:SelectSubGroup(tp,aux.TRUE,false,7,7)
+	aux.GCheckAdditional=nil
 	Duel.Remove(rg,POS_FACEUP,REASON_COST)
 end
 function c79407975.cfilter(c)

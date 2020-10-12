@@ -1,4 +1,4 @@
--- デスペラード・リボルバー・ドラゴン
+--デスペラード・リボルバー・ドラゴン
 function c76728962.initial_effect(c)
 	--spsummon
 	local e1=Effect.CreateEffect(c)
@@ -18,7 +18,6 @@ function c76728962.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_QUICK_O)
 	e2:SetCategory(CATEGORY_DESTROY+CATEGORY_COIN+CATEGORY_DRAW)
 	e2:SetCode(EVENT_FREE_CHAIN)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1)
 	e2:SetCondition(c76728962.descon)
@@ -83,8 +82,8 @@ function c76728962.desop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
 	local dg=g:Select(tp,1,ct,nil)
 	Duel.HintSelection(dg)
-	Duel.Destroy(dg,REASON_EFFECT)
-	if c1+c2+c3==3 then
+	if Duel.Destroy(dg,REASON_EFFECT)~=0 and c1+c2+c3==3 then
+		Duel.BreakEffect()
 		Duel.Draw(tp,1,REASON_EFFECT)
 	end
 end

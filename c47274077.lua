@@ -1,11 +1,12 @@
 --ネオス・フォース
 function c47274077.initial_effect(c)
+	aux.AddCodeList(c,89943723)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_EQUIP)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_CONTINUOUS_TARGET)
 	e1:SetTarget(c47274077.target)
 	e1:SetOperation(c47274077.operation)
 	c:RegisterEffect(e1)
@@ -46,7 +47,6 @@ function c47274077.initial_effect(c)
 	e5:SetOperation(c47274077.retop)
 	c:RegisterEffect(e5)
 end
-c47274077.card_code_list={89943723}
 function c47274077.eqlimit(e,c)
 	return c:IsCode(89943723)
 end

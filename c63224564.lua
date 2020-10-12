@@ -1,11 +1,12 @@
 --サイバー・ボンテージ
 function c63224564.initial_effect(c)
+	aux.AddCodeList(c,12206212)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_EQUIP)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_CONTINUOUS_TARGET)
 	e1:SetTarget(c63224564.target)
 	e1:SetOperation(c63224564.operation)
 	c:RegisterEffect(e1)
@@ -23,7 +24,6 @@ function c63224564.initial_effect(c)
 	e4:SetValue(c63224564.eqlimit)
 	c:RegisterEffect(e4)
 end
-c63224564.card_code_list={12206212}
 function c63224564.eqlimit(e,c)
 	return c:IsCode(76812113,12206212)
 end

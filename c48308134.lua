@@ -5,7 +5,7 @@ function c48308134.initial_effect(c)
 	e1:SetCategory(CATEGORY_EQUIP)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_CONTINUOUS_TARGET)
 	e1:SetTarget(c48308134.target)
 	e1:SetOperation(c48308134.operation)
 	c:RegisterEffect(e1)
@@ -76,7 +76,7 @@ function c48308134.spop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c48308134.spfilter),tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,e,tp)
 	if g:GetCount()>0 then
 		local tc=g:GetFirst()
-		if Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEUP)~=0 then
+		if Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEUP) then
 			Duel.Equip(tp,c,tc)
 			Duel.SpecialSummonComplete()
 			local g=Duel.GetMatchingGroup(c48308134.posfilter,tp,0,LOCATION_MZONE,nil)

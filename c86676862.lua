@@ -1,5 +1,6 @@
 --E－HERO マリシャス・デビル
 function c86676862.initial_effect(c)
+	aux.AddCodeList(c,94820406)
 	--fusion material
 	c:EnableReviveLimit()
 	aux.AddFusionProcCodeFun(c,58554959,c86676862.ffilter,1,true,true)
@@ -34,9 +35,8 @@ function c86676862.initial_effect(c)
 end
 c86676862.material_setcode=0x8
 c86676862.dark_calling=true
-c86676862.card_code_list={94820406}
 function c86676862.splimit(e,se,sp,st)
-	return st==SUMMON_TYPE_FUSION+0x10
+	return se:GetHandler():IsCode(94820406)
 		or Duel.IsPlayerAffectedByEffect(sp,72043279) and st&SUMMON_TYPE_FUSION==SUMMON_TYPE_FUSION
 end
 function c86676862.ffilter(c)

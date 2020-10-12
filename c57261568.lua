@@ -3,7 +3,7 @@ function c57261568.initial_effect(c)
 	c:EnableReviveLimit()
 	--special summon rule
 	local e1=Effect.CreateEffect(c)
-	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_CANNOT_DISABLE)
+	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetCode(EFFECT_SPSUMMON_PROC)
@@ -61,15 +61,15 @@ function c57261568.operation(e,tp,eg,ep,ev,re,r,rp)
 		local tc=Duel.GetOperatedGroup():GetFirst()
 		Duel.ConfirmCards(1-tp,tc)
 		if tc:IsType(TYPE_MONSTER) and tc:IsSetCard(0xe6) then
-			local ct=Duel.GetFieldGroupCount(1-tp,LOCATION_DECK,0)
-			if ct<3 then return end
+			local ct=math.min(3,Duel.GetFieldGroupCount(1-tp,LOCATION_DECK,0))
+			if ct==0 then return end
 			Duel.BreakEffect()
-			local g=Duel.GetDecktopGroup(1-tp,3)
+			local g=Duel.GetDecktopGroup(1-tp,ct)
 			Duel.ConfirmCards(tp,g)
 			local opt=Duel.SelectOption(tp,aux.Stringid(57261568,1),aux.Stringid(57261568,2))
-			Duel.SortDecktop(tp,1-tp,3)
+			Duel.SortDecktop(tp,1-tp,ct)
 			if opt==1 then
-				for i=1,3 do
+				for i=1,ct do
 					local mg=Duel.GetDecktopGroup(1-tp,1)
 					Duel.MoveSequence(mg:GetFirst(),1)
 				end
@@ -123,7 +123,6 @@ function c57261568.synop(e,tp,eg,ep,ev,re,r,rp,syncard,f,min,max)
 		if cg:GetCount()==0 then break end
 		local minct=1
 		if c57261568.syngoal(g,tp,lv,syncard,minc,i) then
-			if not Duel.SelectYesNo(tp,210) then break end
 			minct=0
 		end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SMATERIAL)

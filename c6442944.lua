@@ -6,8 +6,8 @@ function c6442944.initial_effect(c)
 	e1:SetCode(EFFECT_SPSUMMON_PROC)
 	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
 	e1:SetRange(LOCATION_HAND)
-	e1:SetValue(1)
-	e1:SetCountLimit(1,6442944)
+	e1:SetValue(SUMMON_VALUE_SELF)
+	e1:SetCountLimit(1,6442944+EFFECT_COUNT_CODE_OATH)
 	e1:SetCondition(c6442944.hspcon)
 	c:RegisterEffect(e1)
 	--spsummon
@@ -34,7 +34,7 @@ function c6442944.hspcon(e,c)
 		and Duel.GetLocationCount(c:GetControler(),LOCATION_MZONE)>0
 end
 function c6442944.spcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():GetSummonType()==SUMMON_TYPE_SPECIAL+1
+	return e:GetHandler():GetSummonType()==SUMMON_TYPE_SPECIAL+SUMMON_VALUE_SELF
 end
 function c6442944.spfilter(c,e,tp)
 	return c:IsRace(RACE_SEASERPENT) and c:IsLevel(8) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
@@ -59,8 +59,8 @@ function c6442944.spop(e,tp,eg,ep,ev,re,r,rp)
 		local e2=e1:Clone()
 		e2:SetCode(EFFECT_SET_DEFENSE_FINAL)
 		tc:RegisterEffect(e2,true)
-		Duel.SpecialSummonComplete()
 	end
+	Duel.SpecialSummonComplete()
 end
 function c6442944.lvop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

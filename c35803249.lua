@@ -1,5 +1,6 @@
 --人造人間－サイコ・ロード
 function c35803249.initial_effect(c)
+	aux.AddCodeList(c,77585513)
 	c:EnableReviveLimit()
 	--cannot special summon
 	local e1=Effect.CreateEffect(c)
@@ -12,7 +13,7 @@ function c35803249.initial_effect(c)
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetCode(EFFECT_SPSUMMON_PROC)
-	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e2:SetRange(LOCATION_HAND)
 	e2:SetCondition(c35803249.spcon)
 	e2:SetOperation(c35803249.spop)
@@ -69,16 +70,17 @@ function c35803249.disop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.NegateEffect(ev)
 	end
 end
-function c35803249.spfilter(c)
-	return c:IsFaceup() and c:IsCode(77585513)
+function c35803249.spfilter(c,tp)
+	return c:IsFaceup() and c:IsCode(77585513) and c:IsAbleToGraveAsCost() and Duel.GetMZoneCount(tp,c)>0
 end
 function c35803249.spcon(e,c)
 	if c==nil then return true end
-	return Duel.CheckReleaseGroup(c:GetControler(),c35803249.spfilter,1,nil)
+	return Duel.IsExistingMatchingCard(c35803249.spfilter,c:GetControler(),LOCATION_MZONE,0,1,nil,c:GetControler())
 end
 function c35803249.spop(e,tp,eg,ep,ev,re,r,rp,c)
-	local g=Duel.SelectReleaseGroup(tp,c35803249.spfilter,1,1,nil)
-	Duel.Release(g,REASON_COST)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	local g=Duel.SelectMatchingCard(tp,c35803249.spfilter,tp,LOCATION_MZONE,0,1,1,nil,tp)
+	Duel.SendtoGrave(g,REASON_COST)
 end
 function c35803249.filter(c)
 	return c:IsFaceup() and c:IsType(TYPE_TRAP)

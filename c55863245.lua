@@ -24,7 +24,7 @@ function c55863245.initial_effect(c)
 	--hand synchro
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE)
-	e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_SPSUM_PARAM)
 	e3:SetCondition(c55863245.syncon)
 	e3:SetCode(EFFECT_HAND_SYNCHRO)
 	e3:SetTargetRange(0,1)
@@ -73,7 +73,6 @@ function c55863245.synop(e,tp,eg,ep,ev,re,r,rp,syncard,f,min,max)
 		if cg:GetCount()==0 then break end
 		local minct=1
 		if c55863245.syngoal(g,tp,lv,syncard,minc,i) then
-			if not Duel.SelectYesNo(tp,210) then break end
 			minct=0
 		end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SMATERIAL)

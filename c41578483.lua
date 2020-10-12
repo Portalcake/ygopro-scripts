@@ -89,9 +89,7 @@ function c41578483.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
 	if tc:IsFaceup() and tc:IsRelateToEffect(e) and tc:IsType(TYPE_MONSTER) and tc:IsControler(1-tp) then
-		if c:IsFaceup() and c:IsRelateToEffect(e) then
-			c41578483.equip_monster(c,tp,tc)
-		else Duel.SendtoGrave(tc,REASON_RULE) end
+		c41578483.equip_monster(c,tp,tc)
 	end
 end
 function c41578483.atkval(e,c)
@@ -135,7 +133,8 @@ function c41578483.distg(e,c)
 end
 function c41578483.discon(e,tp,eg,ep,ev,re,r,rp)
 	local g=e:GetHandler():GetEquipGroup():Filter(c41578483.disfilter,nil)
-	return re:IsActiveType(TYPE_MONSTER) and g:IsExists(Card.IsCode,1,nil,re:GetHandler():GetCode())
+	local code,type=Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_CODE,CHAININFO_TYPE)
+	return type==TYPE_MONSTER and g:IsExists(Card.IsCode,1,nil,code)
 end
 function c41578483.disop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.NegateEffect(ev)

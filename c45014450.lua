@@ -122,7 +122,10 @@ end
 function c45014450.rstop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local cid=e:GetLabel()
-	if cid~=0 then c:ResetEffect(cid,RESET_COPY) end
+	if cid~=0 then
+		c:ResetEffect(cid,RESET_COPY)
+		c:ResetEffect(RESET_DISABLE,RESET_EVENT)
+	end
 	local e1=e:GetLabelObject()
 	e1:Reset()
 	Duel.HintSelection(Group.FromCards(c))
@@ -146,6 +149,6 @@ function c45014450.penop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c45014450.penfilter,tp,LOCATION_PZONE,0,1,1,nil,e,tp)
 	if g:GetCount()>0 and Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)>0 then
-		Duel.MoveToField(c,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
+		Duel.MoveToField(c,tp,tp,LOCATION_PZONE,POS_FACEUP,true)
 	end
 end

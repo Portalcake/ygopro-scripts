@@ -26,7 +26,7 @@ function c90036274.initial_effect(c)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetHintTiming(TIMING_DAMAGE_STEP,TIMING_DAMAGE_STEP+TIMINGS_CHECK_MONSTER)
 	e2:SetCountLimit(1,90036275)
-	e2:SetCondition(c90036274.discon)
+	e2:SetCondition(aux.dscon)
 	e2:SetTarget(c90036274.distg)
 	e2:SetOperation(c90036274.disop)
 	c:RegisterEffect(e2)
@@ -67,11 +67,8 @@ function c90036274.spop(e,tp,eg,ep,ev,re,r,rp)
 	if not c:IsRelateToEffect(e) then return end
 	Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
 end
-function c90036274.discon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated()
-end
 function c90036274.disfilter(c)
-	return c:GetSummonLocation()==LOCATION_EXTRA and not (c:IsAttack(0) and c:IsDisabled())
+	return c:IsFaceup() and c:GetSummonLocation()==LOCATION_EXTRA and (c:IsAttackAbove(1) or aux.disfilter1(c))
 end
 function c90036274.distg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and c90036274.disfilter(chkc) end
@@ -114,6 +111,6 @@ function c90036274.penop(e,tp,eg,ep,ev,re,r,rp)
 	if not Duel.CheckLocation(tp,LOCATION_PZONE,0) and not Duel.CheckLocation(tp,LOCATION_PZONE,1) then return false end
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) then
-		Duel.MoveToField(c,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
+		Duel.MoveToField(c,tp,tp,LOCATION_PZONE,POS_FACEUP,true)
 	end
 end

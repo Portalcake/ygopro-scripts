@@ -61,7 +61,7 @@ end
 function c40771118.plfilter(c,tp,mc)
 	if not c:IsCode(31893528,67287533,94772232,30170981) then return false end
 	if Duel.IsPlayerAffectedByEffect(tp,16625614) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,c:GetCode(),0,0x11,0,0,1,RACE_FIEND,ATTRIBUTE_DARK,POS_FACEUP,tp,181) then return true end
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,c:GetCode(),0,0x11,0,0,1,RACE_FIEND,ATTRIBUTE_DARK,POS_FACEUP,tp,SUMMON_VALUE_DARK_SANCTUARY) then return true end
 	local ft=Duel.GetLocationCount(tp,LOCATION_SZONE)
 	if mc:IsLocation(LOCATION_SZONE) then ft=ft+1 end
 	return ft>0 and not c:IsForbidden()
@@ -75,10 +75,10 @@ function c40771118.plop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,c40771118.plfilter,tp,LOCATION_HAND+LOCATION_GRAVE+LOCATION_DECK,0,1,1,nil,tp,c)
 	local tc=g:GetFirst()
 	if tc and Duel.IsPlayerAffectedByEffect(tp,16625614) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,tc:GetCode(),0,0x11,0,0,1,RACE_FIEND,ATTRIBUTE_DARK,POS_FACEUP,tp,181)
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,tc:GetCode(),0,0x11,0,0,1,RACE_FIEND,ATTRIBUTE_DARK,POS_FACEUP,tp,SUMMON_VALUE_DARK_SANCTUARY)
 		and Duel.SelectYesNo(tp,aux.Stringid(16625614,0)) then
 		tc:AddMonsterAttribute(TYPE_NORMAL,ATTRIBUTE_DARK,RACE_FIEND,1,0,0)
-		Duel.SpecialSummonStep(tc,181,tp,tp,true,false,POS_FACEUP)
+		Duel.SpecialSummonStep(tc,SUMMON_VALUE_DARK_SANCTUARY,tp,tp,true,false,POS_FACEUP)
 		--immune
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
@@ -92,12 +92,11 @@ function c40771118.plop(e,tp,eg,ep,ev,re,r,rp)
 		local e2=Effect.CreateEffect(c)
 		e2:SetType(EFFECT_TYPE_SINGLE)
 		e2:SetCode(EFFECT_IGNORE_BATTLE_TARGET)
+		e2:SetValue(aux.imval1)
 		e2:SetReset(RESET_EVENT+0x47c0000)
 		tc:RegisterEffect(e2)
 		Duel.SpecialSummonComplete()
-		c:RegisterFlagEffect(94212438,RESET_EVENT+RESETS_STANDARD,0,0)
-	elseif tc and Duel.GetLocationCount(tp,LOCATION_SZONE)>0
-		and Duel.MoveToField(tc,tp,tp,LOCATION_SZONE,POS_FACEUP,true) then
-		c:RegisterFlagEffect(94212438,RESET_EVENT+RESETS_STANDARD,0,0)
+	elseif tc and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 then
+		Duel.MoveToField(tc,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
 	end
 end

@@ -1,5 +1,6 @@
 --大天使ゼラート
 function c18378582.initial_effect(c)
+	aux.AddCodeList(c,56433456)
 	c:EnableReviveLimit()
 	--cannot special summon
 	local e1=Effect.CreateEffect(c)
@@ -11,7 +12,7 @@ function c18378582.initial_effect(c)
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetCode(EFFECT_SPSUMMON_PROC)
-	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_CANNOT_DISABLE)
+	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e2:SetRange(LOCATION_HAND)
 	e2:SetCondition(c18378582.spcon)
 	e2:SetOperation(c18378582.spop)
@@ -27,7 +28,6 @@ function c18378582.initial_effect(c)
 	e3:SetOperation(c18378582.desop)
 	c:RegisterEffect(e3)
 end
-c18378582.card_code_list={56433456}
 function c18378582.rfilter(c,code)
 	return c:IsFaceup() and c:IsCode(code)
 end

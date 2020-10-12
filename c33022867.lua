@@ -11,7 +11,7 @@ function c33022867.initial_effect(c)
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetCode(EFFECT_SPSUMMON_PROC)
-	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e2:SetRange(LOCATION_HAND)
 	e2:SetCondition(c33022867.spcon)
 	e2:SetTarget(c33022867.sptg)
@@ -28,19 +28,16 @@ function c33022867.initial_effect(c)
 	e3:SetValue(1)
 	c:RegisterEffect(e3)
 end
-function c33022867.fselect(g,tp)
-	return Duel.GetMZoneCount(tp,g)>0
-end
 function c33022867.spcon(e,c)
 	if c==nil then return true end
 	local tp=c:GetControler()
 	local rg=Duel.GetReleaseGroup(tp)
-	return rg:CheckSubGroup(c33022867.fselect,3,3,tp)
+	return rg:CheckSubGroup(aux.mzctcheck,3,3,tp)
 end
 function c33022867.sptg(e,tp,eg,ep,ev,re,r,rp,chk,c)
 	local rg=Duel.GetReleaseGroup(tp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
-	local sg=rg:SelectSubGroup(tp,c33022867.fselect,true,3,3,tp)
+	local sg=rg:SelectSubGroup(tp,aux.mzctcheck,true,3,3,tp)
 	if sg then
 		sg:KeepAlive()
 		e:SetLabelObject(sg)

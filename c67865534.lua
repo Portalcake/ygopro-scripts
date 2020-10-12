@@ -84,7 +84,7 @@ function c67865534.spop(e,tp,eg,ep,ev,re,r,rp)
 		if (Duel.CheckLocation(tp,LOCATION_PZONE,0) or Duel.CheckLocation(tp,LOCATION_PZONE,1))
 			and c:IsRelateToEffect(e) and c:IsFaceup()
 			and Duel.SelectEffectYesNo(tp,c,aux.Stringid(67865534,3)) then
-			Duel.MoveToField(c,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
+			Duel.MoveToField(c,tp,tp,LOCATION_PZONE,POS_FACEUP,true)
 		end
 	end
 end
@@ -92,7 +92,7 @@ function c67865534.xyzcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_PENDULUM)
 end
 function c67865534.xyzfilter(c)
-	return c:IsType(TYPE_PENDULUM) and c:IsType(TYPE_MONSTER)
+	return c:IsType(TYPE_PENDULUM) and c:IsType(TYPE_MONSTER) and c:IsCanOverlay()
 end
 function c67865534.xyztg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_GRAVE) and c67865534.xyzfilter(chkc) end

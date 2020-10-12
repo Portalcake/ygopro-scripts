@@ -36,10 +36,7 @@ function c95239444.stcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	e:SetLabel(Duel.GetOperatedGroup():GetFirst():GetLevel())
 end
 function c95239444.stop(e,tp,eg,ep,ev,re,r,rp)
-	local ct=e:GetLabel()
-	if Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>=ct then
-		Duel.SortDecktop(tp,tp,ct)
-	end
+	Duel.SortDecktop(tp,tp,e:GetLabel())
 end
 function c95239444.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
@@ -66,7 +63,6 @@ function c95239444.operation(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
 		local tg=Duel.SelectMatchingCard(tp,Card.IsAbleToHand,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,sg:GetCount(),c)
 		if tg:GetCount()>0 then
-			Duel.BreakEffect()
 			Duel.DisableShuffleCheck(false)
 			Duel.SendtoHand(tg,nil,REASON_EFFECT)
 		end

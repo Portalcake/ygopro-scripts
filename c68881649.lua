@@ -8,7 +8,7 @@ function c68881649.initial_effect(c)
 	e1:SetRange(LOCATION_HAND+LOCATION_DECK)
 	e1:SetCondition(c68881649.spcon)
 	e1:SetOperation(c68881649.spop)
-	e1:SetValue(1)
+	e1:SetValue(SUMMON_VALUE_SELF)
 	c:RegisterEffect(e1)
 	--pierce
 	local e2=Effect.CreateEffect(c)
@@ -37,8 +37,7 @@ function c68881649.spop(e,tp,eg,ep,ev,re,r,rp,c)
 	local g2=Duel.SelectMatchingCard(tp,c68881649.spfilter2,tp,LOCATION_MZONE,0,1,1,g1:GetFirst())
 	g1:Merge(g2)
 	Duel.SendtoGrave(g1,REASON_COST)
-	Duel.ShuffleDeck(tp)
 end
 function c68881649.condition(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():GetSummonType()==SUMMON_TYPE_SPECIAL+1
+	return e:GetHandler():GetSummonType()==SUMMON_TYPE_SPECIAL+SUMMON_VALUE_SELF
 end

@@ -14,7 +14,7 @@ function c15291624.initial_effect(c)
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetCode(EFFECT_SPSUMMON_PROC)
-	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e2:SetRange(LOCATION_EXTRA)
 	e2:SetCondition(c15291624.spcon)
 	e2:SetOperation(c15291624.spop)
@@ -43,13 +43,13 @@ function c15291624.chainfilter(re,tp,cid)
 		and Duel.GetChainInfo(cid,CHAININFO_TRIGGERING_LOCATION)==LOCATION_HAND)
 end
 function c15291624.spfilter(c,fc,tp)
-	return c:IsRace(RACE_THUNDER) and c:IsType(TYPE_EFFECT) and not c:IsType(TYPE_FUSION)
-		and c:IsReleasable() and Duel.GetLocationCountFromEx(tp,tp,c,fc)>0
+	return c:IsRace(RACE_THUNDER) and c:IsFusionType(TYPE_EFFECT) and not c:IsFusionType(TYPE_FUSION)
+		and c:IsReleasable() and Duel.GetLocationCountFromEx(tp,tp,c,fc)>0 and c:IsCanBeFusionMaterial(fc,SUMMON_TYPE_SPECIAL)
 end
 function c15291624.spcon(e,c)
 	if c==nil then return true end
 	local tp=c:GetControler()
-	return Duel.GetCustomActivityCount(15291624,tp,ACTIVITY_CHAIN)~=0
+	return (Duel.GetCustomActivityCount(15291624,tp,ACTIVITY_CHAIN)~=0 or Duel.GetCustomActivityCount(15291624,1-tp,ACTIVITY_CHAIN)~=0)
 		and Duel.CheckReleaseGroup(tp,c15291624.spfilter,1,nil,c,tp)
 end
 function c15291624.spop(e,tp,eg,ep,ev,re,r,rp,c)

@@ -1,11 +1,12 @@
 --インスタント・ネオスペース
 function c11913700.initial_effect(c)
+	aux.AddCodeList(c,89943723)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_EQUIP)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_CONTINUOUS_TARGET)
 	e1:SetTarget(c11913700.target)
 	e1:SetOperation(c11913700.operation)
 	c:RegisterEffect(e1)
@@ -33,7 +34,6 @@ function c11913700.initial_effect(c)
 	e4:SetOperation(c11913700.spop)
 	c:RegisterEffect(e4)
 end
-c11913700.card_code_list={89943723}
 function c11913700.eqlimit(e,c)
 	return aux.IsMaterialListCode(c,89943723)
 end

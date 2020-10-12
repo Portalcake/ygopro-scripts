@@ -1,5 +1,6 @@
 --ラーの翼神竜－球体形
 function c10000080.initial_effect(c)
+	aux.AddCodeList(c,10000010)
 	Duel.EnableGlobalFlag(GLOBALFLAG_BRAINWASHING_CHECK)
 	--summon with 3 tribute
 	local e1=Effect.CreateEffect(c)
@@ -161,6 +162,6 @@ function c10000080.spop(e,tp,eg,ep,ev,re,r,rp)
 		local e2=e1:Clone()
 		e2:SetCode(EFFECT_SET_DEFENSE)
 		tc:RegisterEffect(e2)
-		Duel.SpecialSummonComplete()
 	end
+	Duel.SpecialSummonComplete()
 end

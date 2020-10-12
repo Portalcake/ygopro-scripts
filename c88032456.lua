@@ -1,5 +1,6 @@
 --コピーキャット
 function c88032456.initial_effect(c)
+	aux.AddCodeList(c,15259703)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -49,6 +50,5 @@ function c88032456.activate(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
 	elseif (tc:IsType(TYPE_FIELD) or Duel.GetLocationCount(tp,LOCATION_SZONE)>0) then
 		Duel.SSet(tp,tc)
-		Duel.ConfirmCards(1-tp,tc)
 	end
 end

@@ -5,7 +5,7 @@ function c59385322.initial_effect(c)
 	e1:SetCategory(CATEGORY_EQUIP)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_CONTINUOUS_TARGET)
 	e1:SetTarget(c59385322.target)
 	e1:SetOperation(c59385322.operation)
 	c:RegisterEffect(e1)
@@ -79,7 +79,7 @@ function c59385322.desop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c59385322.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsReason(REASON_LOST_TARGET)
-		and not e:GetHandler():GetPreviousEquipTarget():IsLocation(LOCATION_MZONE)
+		and not e:GetHandler():GetPreviousEquipTarget():IsLocation(LOCATION_ONFIELD+LOCATION_OVERLAY)
 end
 function c59385322.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToHand() end

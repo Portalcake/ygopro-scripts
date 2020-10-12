@@ -7,7 +7,7 @@ function c47598941.initial_effect(c)
 	e0:SetCode(EVENT_FREE_CHAIN)
 	e0:SetProperty(EFFECT_FLAG_DAMAGE_STEP)
 	e0:SetHintTiming(TIMING_DAMAGE_STEP)
-	e0:SetCondition(c47598941.condition)
+	e0:SetCondition(aux.dscon)
 	c:RegisterEffect(e0)
 	--set p
 	local e2=Effect.CreateEffect(c)
@@ -34,9 +34,6 @@ function c47598941.initial_effect(c)
 	e4:SetCode(EFFECT_UPDATE_DEFENSE)
 	c:RegisterEffect(e4)
 end
-function c47598941.condition(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated()
-end
 function c47598941.cfilter(c,tp)
 	return c:IsPreviousLocation(LOCATION_PZONE) and c:GetPreviousControler()==tp
 end
@@ -58,7 +55,7 @@ function c47598941.setop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,c47598941.filter,tp,LOCATION_DECK,0,1,1,nil)
 	local tc=g:GetFirst()
 	if tc then
-		Duel.MoveToField(tc,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
+		Duel.MoveToField(tc,tp,tp,LOCATION_PZONE,POS_FACEUP,true)
 	end
 end
 function c47598941.atktg(e,c)

@@ -12,12 +12,11 @@ function c3912064.initial_effect(c)
 	--summon with 3 tribute
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(3912064,0))
-	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e2:SetType(EFFECT_TYPE_SINGLE)
 	e2:SetCode(EFFECT_SUMMON_PROC)
 	e2:SetCondition(c3912064.ttcon)
 	e2:SetOperation(c3912064.ttop)
-	e2:SetValue(SUMMON_TYPE_ADVANCE+1)
+	e2:SetValue(SUMMON_TYPE_ADVANCE+SUMMON_VALUE_SELF)
 	c:RegisterEffect(e2)
 	--atk down
 	local e3=Effect.CreateEffect(c)
@@ -57,10 +56,10 @@ function c3912064.ttop(e,tp,eg,ep,ev,re,r,rp,c)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
 	local g=Duel.SelectTribute(tp,c,3,3)
 	c:SetMaterial(g)
-	Duel.Release(g, REASON_SUMMON+REASON_MATERIAL)
+	Duel.Release(g,REASON_SUMMON+REASON_MATERIAL)
 end
 function c3912064.atkcon(e)
-	return e:GetHandler():GetSummonType()==SUMMON_TYPE_ADVANCE+1
+	return e:GetHandler():GetSummonType()==SUMMON_TYPE_ADVANCE+SUMMON_VALUE_SELF
 end
 function c3912064.atkval(e,c)
 	local rec=c:GetBaseAttack()

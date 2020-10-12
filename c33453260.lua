@@ -1,11 +1,12 @@
 --コミックハンド
 function c33453260.initial_effect(c)
+	aux.AddCodeList(c,15259703)
 	--Equip
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_EQUIP+CATEGORY_CONTROL)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_CONTINUOUS_TARGET)
 	e1:SetCondition(c33453260.condition)
 	e1:SetTarget(c33453260.target)
 	e1:SetOperation(c33453260.activate)
@@ -51,7 +52,7 @@ function c33453260.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsExistingMatchingCard(c33453260.cfilter,tp,LOCATION_ONFIELD,0,1,nil)
 end
 function c33453260.filter(c)
-	return c:IsFaceup() and c:IsControlerCanBeChanged()
+	return c:IsFaceup()
 end
 function c33453260.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and c33453260.filter(chkc) end

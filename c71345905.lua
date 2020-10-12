@@ -14,12 +14,11 @@ function c71345905.filter1(c,e,tp)
 	local rk=c:GetRank()
 	return rk>1 and c:IsFaceup() and c:IsSetCard(0x107f)
 		and Duel.IsExistingMatchingCard(c71345905.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c,rk)
-		and Duel.GetLocationCountFromEx(tp,tp,c)>0
 		and aux.MustMaterialCheck(c,tp,EFFECT_MUST_BE_XMATERIAL)
 end
 function c71345905.filter2(c,e,tp,mc,rk)
 	return c:IsRankBelow(rk-1) and c:IsSetCard(0x107f) and mc:IsCanBeXyzMaterial(c)
-		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
+		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0
 end
 function c71345905.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and c71345905.filter1(chkc,e,tp) end
@@ -30,7 +29,7 @@ function c71345905.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function c71345905.activate(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if Duel.GetLocationCountFromEx(tp,tp,tc)<=0 or not aux.MustMaterialCheck(tc,tp,EFFECT_MUST_BE_XMATERIAL) then return end
+	if not aux.MustMaterialCheck(tc,tp,EFFECT_MUST_BE_XMATERIAL) then return end
 	if tc:IsFacedown() or not tc:IsRelateToEffect(e) or tc:IsControler(1-tp) or tc:IsImmuneToEffect(e) then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c71345905.filter2,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,tc,tc:GetRank())
@@ -48,12 +47,24 @@ function c71345905.activate(e,tp,eg,ep,ev,re,r,rp)
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
 		e1:SetCode(EVENT_ATTACK_ANNOUNCE)
+		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 		e1:SetOperation(c71345905.disop)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 		sc:RegisterEffect(e1)
 		local e2=e1:Clone()
 		e2:SetCode(EVENT_BE_BATTLE_TARGET)
 		sc:RegisterEffect(e2)
+		local e3=Effect.CreateEffect(e:GetHandler())
+		e3:SetType(EFFECT_TYPE_FIELD)
+		e3:SetCode(EFFECT_DISABLE)
+		e3:SetRange(LOCATION_MZONE)
+		e3:SetTargetRange(0,LOCATION_MZONE)
+		e3:SetTarget(c71345905.distg)
+		e3:SetReset(RESET_EVENT+RESETS_STANDARD)
+		sc:RegisterEffect(e3)
+		local e4=e3:Clone()
+		e4:SetCode(EFFECT_DISABLE_EFFECT)
+		sc:RegisterEffect(e4)
 		sc:RegisterFlagEffect(0,RESET_EVENT+RESETS_STANDARD,EFFECT_FLAG_CLIENT_HINT,1,0,aux.Stringid(71345905,0))
 	end
 end
@@ -61,15 +72,9 @@ function c71345905.disop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local bc=c:GetBattleTarget()
 	if bc then
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_DISABLE)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_BATTLE)
-		bc:RegisterEffect(e1)
-		local e2=Effect.CreateEffect(c)
-		e2:SetType(EFFECT_TYPE_SINGLE)
-		e2:SetCode(EFFECT_DISABLE_EFFECT)
-		e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_BATTLE)
-		bc:RegisterEffect(e2)
+		bc:RegisterFlagEffect(71345905,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_BATTLE,0,1)
 	end
+end
+function c71345905.distg(e,c)
+	return c:GetFlagEffect(71345905)~=0
 end

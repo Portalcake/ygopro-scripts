@@ -38,13 +38,14 @@ function c91299846.tffilter(c,cc,tp)
 		and not c:IsForbidden() and c:CheckUniqueOnField(tp,LOCATION_ONFIELD,cc)
 end
 function c91299846.tfcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c91299846.cfilter,tp,LOCATION_SZONE,0,1,nil,tp) end
+	if chk==0 then return Duel.IsExistingMatchingCard(c91299846.cfilter,tp,LOCATION_ONFIELD,0,1,nil,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,c91299846.cfilter,tp,LOCATION_SZONE,0,1,1,nil,tp)
+	local g=Duel.SelectMatchingCard(tp,c91299846.cfilter,tp,LOCATION_ONFIELD,0,1,1,nil,tp)
 	Duel.SendtoGrave(g,REASON_COST)
 end
 function c91299846.tftg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_SZONE)>-1 end
+	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
 end
 function c91299846.tfop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 then return end

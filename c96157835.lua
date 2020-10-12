@@ -53,26 +53,30 @@ function c96157835.spop1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
 end
+function c96157835.ctfilter(c)
+	return c:IsSetCard(0xba) and c:GetOriginalType()&TYPE_MONSTER==TYPE_MONSTER
+end
 function c96157835.ctcon(e)
-	return e:GetHandler():GetOverlayGroup():IsExists(Card.IsSetCard,1,nil,0xba)
+	return e:GetHandler():GetOverlayGroup():IsExists(c96157835.ctfilter,1,nil)
 end
 function c96157835.ctval(e,c)
-	return e:GetHandler():GetOverlayGroup():FilterCount(Card.IsSetCard,nil,0xba)-1
+	return e:GetHandler():GetOverlayGroup():FilterCount(c96157835.ctfilter,nil)-1
 end
 function c96157835.spcon2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return c:GetOverlayGroup():IsExists(Card.IsSetCard,1,nil,0xba) and c:IsPreviousLocation(LOCATION_MZONE)
+	return c:GetOverlayGroup():IsExists(c96157835.ctfilter,1,nil) and c:IsPreviousLocation(LOCATION_MZONE)
 end
 function c96157835.spfilter2(c,e,tp)
 	return c:IsSetCard(0xba) and c:IsType(TYPE_XYZ) and not c:IsCode(96157835) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+		and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
 end
 function c96157835.sptg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetLocationCountFromEx(tp)>0
-		and Duel.IsExistingMatchingCard(c96157835.spfilter2,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
+	if chk==0 then return Duel.IsExistingMatchingCard(c96157835.spfilter2,tp,LOCATION_EXTRA,0,1,nil,e,tp)
+		and e:GetHandler():IsCanOverlay() end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
+	Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,e:GetHandler(),1,0,0)
 end
 function c96157835.spop2(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCountFromEx(tp)<=0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c96157835.spfilter2,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
 	local tc=g:GetFirst()

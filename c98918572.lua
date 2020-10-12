@@ -32,7 +32,7 @@ function c98918572.rfilter(c,oc)
 end
 function c98918572.rcon(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
-	return bit.band(r,REASON_COST)~=0 and re:IsHasType(0x7e0)
+	return bit.band(r,REASON_COST)~=0 and re:IsActivated()
 		and re:IsActiveType(TYPE_XYZ) and ep==e:GetOwnerPlayer() and rc:IsSetCard(0xf1)
 		and Duel.IsExistingMatchingCard(c98918572.rfilter,tp,LOCATION_MZONE,0,1,rc,ev)
 end
@@ -50,17 +50,15 @@ function c98918572.xyztg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end
 	if chk==0 then return Duel.IsExistingTarget(c98918572.xyzfilter,tp,LOCATION_MZONE,0,2,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(98918572,1))
-	local g1=Duel.SelectTarget(tp,c98918572.xyzfilter,tp,LOCATION_MZONE,0,1,1,nil)
-	e:SetLabelObject(g1:GetFirst())
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
-	local g2=Duel.SelectTarget(tp,c98918572.xyzfilter,tp,LOCATION_MZONE,0,1,1,g1:GetFirst())
+	Duel.SelectTarget(tp,c98918572.xyzfilter,tp,LOCATION_MZONE,0,2,2,nil)
 end
 function c98918572.xyzop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(Card.IsRelateToEffect,nil,e)
 	if g:GetCount()~=2 then return end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
+	local xc=g:Select(tp,1,1,nil):GetFirst()
+	g:RemoveCard(xc)
 	local tc=g:GetFirst()
-	local xc=g:GetNext()
-	if xc==e:GetLabelObject() then tc,xc=xc,tc end
 	if not tc:IsImmuneToEffect(e) then
 		local og=xc:GetOverlayGroup()
 		if og:GetCount()>0 then

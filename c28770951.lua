@@ -30,7 +30,8 @@ function c28770951.matfilter(c)
 end
 function c28770951.mattg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and c28770951.matfilter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(c28770951.matfilter,tp,LOCATION_MZONE,0,1,nil) end
+	if chk==0 then return Duel.IsExistingTarget(c28770951.matfilter,tp,LOCATION_MZONE,0,1,nil)
+		and e:GetHandler():IsCanOverlay() end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
 	Duel.SelectTarget(tp,c28770951.matfilter,tp,LOCATION_MZONE,0,1,1,nil)
 end
@@ -48,22 +49,17 @@ function c28770951.drtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c28770951.filter(chkc,e) end
 	local g=Duel.GetMatchingGroup(c28770951.filter,tp,LOCATION_GRAVE,0,nil,e)
 	if chk==0 then return g:GetClassCount(Card.GetCode)>=5 and Duel.IsPlayerCanDraw(tp,2) end
-	local sg=Group.CreateGroup()
-	for i=1,5 do
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-		local tc=g:Select(tp,1,1,nil):GetFirst()
-		if tc then
-			sg:AddCard(tc)
-			g:Remove(Card.IsCode,nil,tc:GetCode())
-		end
-	end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	aux.GCheckAdditional=aux.dncheck
+	local sg=g:SelectSubGroup(tp,aux.TRUE,false,5,5)
+	aux.GCheckAdditional=nil
 	Duel.SetTargetCard(sg)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,sg,sg:GetCount(),0,0)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,2)
 end
 function c28770951.drop(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
-	if not tg or tg:FilterCount(Card.IsRelateToEffect,nil,e)~=5 then return end
+	local tg=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(Card.IsRelateToEffect,nil,e)
+	if #tg==0 then return end
 	Duel.SendtoDeck(tg,nil,0,REASON_EFFECT)
 	local g=Duel.GetOperatedGroup()
 	if g:IsExists(Card.IsLocation,1,nil,LOCATION_DECK) then Duel.ShuffleDeck(tp) end

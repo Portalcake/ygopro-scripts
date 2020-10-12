@@ -8,6 +8,7 @@ function c71197066.initial_effect(c)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_HAND+LOCATION_GRAVE)
 	e1:SetCountLimit(1,71197066)
+	e1:SetHintTiming(0,TIMING_END_PHASE)
 	e1:SetCost(c71197066.spcost)
 	e1:SetTarget(c71197066.sptg)
 	e1:SetOperation(c71197066.spop)
@@ -27,7 +28,7 @@ function c71197066.initial_effect(c)
 end
 function c71197066.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetDecktopGroup(tp,8)
-	if chk==0 then return g:FilterCount(Card.IsAbleToRemoveAsCost,nil)==8 end
+	if chk==0 then return g:FilterCount(Card.IsAbleToRemoveAsCost,nil,POS_FACEDOWN)==8 end
 	Duel.DisableShuffleCheck()
 	Duel.Remove(g,POS_FACEDOWN,REASON_COST)
 end
@@ -43,9 +44,9 @@ function c71197066.spop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c71197066.descost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToRemoveAsCost,tp,LOCATION_EXTRA,0,3,nil) end
+	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToRemoveAsCost,tp,LOCATION_EXTRA,0,3,nil,POS_FACEDOWN) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToRemoveAsCost,tp,LOCATION_EXTRA,0,3,3,nil)
+	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToRemoveAsCost,tp,LOCATION_EXTRA,0,3,3,nil,POS_FACEDOWN)
 	Duel.Remove(g,POS_FACEDOWN,REASON_COST)
 end
 function c71197066.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

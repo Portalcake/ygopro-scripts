@@ -11,7 +11,7 @@ function c95403418.initial_effect(c)
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetCode(EFFECT_SPSUMMON_PROC)
-	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e2:SetRange(LOCATION_HAND)
 	e2:SetCondition(c95403418.spcon)
 	e2:SetOperation(c95403418.spop)
@@ -64,21 +64,8 @@ function c95403418.spcon(e,c)
 end
 function c95403418.spop(e,tp,eg,ep,ev,re,r,rp,c)
 	local mg=Duel.GetMatchingGroup(c95403418.filter,tp,LOCATION_MZONE,0,nil)
-	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-	local g=nil
-	if ft>0 then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-		g=mg:Select(tp,1,7,nil)
-	else
-		local ct=-ft+1
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-		g=mg:FilterSelect(tp,c95403418.mzfilter,ct,ct,nil)
-		if mg:GetCount()>ct and Duel.SelectYesNo(tp,210) then
-			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-			local g2=mg:Select(tp,1,7,g)
-			g:Merge(g2)
-		end
-	end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	local g=mg:SelectSubGroup(tp,aux.mzctcheck,false,1,#mg,tp)
 	local ct=Duel.SendtoGrave(g,REASON_COST)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)

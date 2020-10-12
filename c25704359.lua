@@ -6,7 +6,7 @@ function c25704359.initial_effect(c)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetProperty(EFFECT_FLAG_DAMAGE_STEP)
 	e1:SetHintTiming(TIMING_DAMAGE_STEP)
-	e1:SetCondition(c25704359.condition)
+	e1:SetCondition(aux.dscon)
 	c:RegisterEffect(e1)
 	--indestructable
 	local e2=Effect.CreateEffect(c)
@@ -40,11 +40,8 @@ function c25704359.initial_effect(c)
 	e4:SetOperation(c25704359.spop)
 	c:RegisterEffect(e4)
 end
-function c25704359.condition(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated()
-end
 function c25704359.atktg(e,c)
-	return c:IsSetCard(0xc0) and Duel.GetAttacker()==c
+	return c:IsSetCard(0x10c0) and Duel.GetAttacker()==c
 end
 function c25704359.atkcon(e)
 	return Duel.GetCurrentPhase()==PHASE_DAMAGE_CAL and Duel.GetAttackTarget()~=nil

@@ -10,7 +10,7 @@ function c14124483.initial_effect(c)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetHintTiming(TIMING_DAMAGE_STEP)
 	e1:SetCountLimit(1,14124483)
-	e1:SetCondition(c14124483.atkcon)
+	e1:SetCondition(aux.dscon)
 	e1:SetCost(c14124483.atkcost1)
 	e1:SetTarget(c14124483.atktg)
 	e1:SetOperation(c14124483.atkop1)
@@ -25,13 +25,10 @@ function c14124483.initial_effect(c)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetHintTiming(TIMING_DAMAGE_STEP)
 	e2:SetCountLimit(1,14124484)
-	e2:SetCondition(c14124483.atkcon)
+	e2:SetCondition(aux.dscon)
 	e2:SetTarget(c14124483.atkcost2)
 	e2:SetOperation(c14124483.atkop2)
 	c:RegisterEffect(e2)
-end
-function c14124483.atkcon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated()
 end
 function c14124483.atkcost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsDiscardable() end
@@ -41,10 +38,10 @@ function c14124483.atkfilter(c)
 	return c:IsFaceup() and c:IsSetCard(0x8)
 end
 function c14124483.atktg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and c14124483.atkfilter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(c14124483.atkfilter,tp,LOCATION_MZONE,0,1,nil) end
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and c14124483.atkfilter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(c14124483.atkfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
-	Duel.SelectTarget(tp,c14124483.atkfilter,tp,LOCATION_MZONE,0,1,1,nil)
+	Duel.SelectTarget(tp,c14124483.atkfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil)
 end
 function c14124483.atkop1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local tc=Duel.GetFirstTarget()

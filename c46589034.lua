@@ -13,7 +13,7 @@ function c46589034.initial_effect(c)
 	--
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE)
-	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_CANNOT_DISABLE)
+	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e2:SetCode(EFFECT_CANNOT_BE_XYZ_MATERIAL)
 	e2:SetValue(c46589034.xyzlimit)
 	c:RegisterEffect(e2)
@@ -51,8 +51,8 @@ function c46589034.spop(e,tp,eg,ep,ev,re,r,rp)
 			e1:SetValue(tc:GetLevel())
 			e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_DISABLE)
 			c:RegisterEffect(e1)
-			Duel.SpecialSummonComplete()
 		end
+		Duel.SpecialSummonComplete()
 	end
 end
 function c46589034.xyzlimit(e,c)

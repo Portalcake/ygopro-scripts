@@ -8,7 +8,7 @@ function c14756848.initial_effect(c)
 	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetCondition(c14756848.hspcon)
-	e1:SetValue(1)
+	e1:SetValue(SUMMON_VALUE_SELF)
 	c:RegisterEffect(e1)
 	--spsummon limit
 	local e2=Effect.CreateEffect(c)
@@ -38,7 +38,7 @@ function c14756848.hspcon(e,c)
 		and not Duel.IsExistingMatchingCard(c14756848.filter,tp,LOCATION_GRAVE,0,1,nil)
 end
 function c14756848.hspcon2(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():GetSummonType()==SUMMON_TYPE_SPECIAL+1
+	return e:GetHandler():GetSummonType()==SUMMON_TYPE_SPECIAL+SUMMON_VALUE_SELF
 end
 function c14756848.hspop(e,tp,eg,ep,ev,re,r,rp)
 	local e1=Effect.CreateEffect(e:GetHandler())
@@ -99,7 +99,6 @@ function c14756848.desop(e,tp,eg,ep,ev,re,r,rp)
 			and Duel.SelectYesNo(tp,aux.Stringid(14756848,3)) then
 			Duel.BreakEffect()
 			Duel.SSet(tp,tc)
-			Duel.ConfirmCards(1-tp,tc)
 		end
 	else
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
@@ -112,7 +111,7 @@ function c14756848.desop(e,tp,eg,ep,ev,re,r,rp)
 			and not tc:IsLocation(LOCATION_HAND+LOCATION_DECK) and not tc:IsForbidden()
 			and Duel.SelectYesNo(tp,aux.Stringid(14756848,4)) then
 			Duel.BreakEffect()
-			Duel.MoveToField(tc,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
+			Duel.MoveToField(tc,tp,tp,LOCATION_PZONE,POS_FACEUP,true)
 		end
 	end
 end

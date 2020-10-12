@@ -5,7 +5,7 @@ function c68392533.initial_effect(c)
 	e1:SetCategory(CATEGORY_EQUIP)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_CONTINUOUS_TARGET)
 	e1:SetTarget(c68392533.target)
 	e1:SetOperation(c68392533.operation)
 	c:RegisterEffect(e1)
@@ -59,7 +59,7 @@ function c68392533.operation(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c68392533.costchange(e,re,rp,val)
-	if re and re:IsHasType(0x7e0) and re:GetHandler()==e:GetHandler():GetEquipTarget() then
+	if re and re:IsActivated() and re:GetHandler()==e:GetHandler():GetEquipTarget() then
 		return 0
 	else return val end
 end

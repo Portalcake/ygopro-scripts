@@ -11,7 +11,7 @@ function c6133894.initial_effect(c)
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetCode(EFFECT_SPSUMMON_PROC)
-	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_CANNOT_DISABLE)
+	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e2:SetRange(LOCATION_HAND)
 	e2:SetCondition(c6133894.spcon)
 	e2:SetOperation(c6133894.spop)
@@ -42,7 +42,7 @@ function c6133894.hdtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_HANDES,nil,0,1-tp,3)
 end
 function c6133894.hdop(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.IsEnvironment(94585852) then
+	if Duel.IsEnvironment(94585852,tp) then
 		local g=Duel.GetFieldGroup(tp,0,LOCATION_HAND):RandomSelect(tp,3)
 		Duel.SendtoGrave(g,REASON_EFFECT+REASON_DISCARD)
 	end

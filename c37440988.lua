@@ -13,7 +13,7 @@ function c37440988.initial_effect(c)
 	--spsummon
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e2:SetCode(EFFECT_SPSUMMON_PROC)
 	e2:SetRange(LOCATION_EXTRA)
 	e2:SetCondition(c37440988.hspcon)
@@ -43,7 +43,7 @@ function c37440988.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 function c37440988.hspfilter(c,tp,sc)
-	return c:IsSetCard(0x2034) and c:IsLevel(10) and c:IsControler(tp) and Duel.GetLocationCountFromEx(tp,tp,c,sc)>0
+	return c:IsFusionSetCard(0x2034) and c:IsLevel(10) and c:IsControler(tp) and Duel.GetLocationCountFromEx(tp,tp,c,sc)>0 and c:IsCanBeFusionMaterial(sc,SUMMON_TYPE_SPECIAL)
 end
 function c37440988.hspcon(e,c)
 	if c==nil then return true end
@@ -51,6 +51,7 @@ function c37440988.hspcon(e,c)
 end
 function c37440988.hspop(e,tp,eg,ep,ev,re,r,rp,c)
 	local g=Duel.SelectReleaseGroup(tp,c37440988.hspfilter,1,1,nil,tp,c)
+	c:SetMaterial(g)
 	Duel.Release(g,REASON_COST)
 end
 function c37440988.cfilter(c)

@@ -1,11 +1,12 @@
 --魔術の呪文書
 function c67227834.initial_effect(c)
+	aux.AddCodeList(c,46986414,38033121)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_EQUIP)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_CONTINUOUS_TARGET)
 	e1:SetTarget(c67227834.target)
 	e1:SetOperation(c67227834.operation)
 	c:RegisterEffect(e1)
@@ -34,7 +35,6 @@ function c67227834.initial_effect(c)
 	e4:SetOperation(c67227834.recop)
 	c:RegisterEffect(e4)
 end
-c67227834.card_code_list={46986414,38033121}
 function c67227834.eqlimit(e,c)
 	return c:IsCode(46986414,38033121)
 end

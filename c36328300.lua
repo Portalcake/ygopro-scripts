@@ -32,32 +32,23 @@ function c36328300.cfilter(c)
 	return c:IsSetCard(0x1034) and (c:IsFaceup() or not c:IsLocation(LOCATION_ONFIELD)) and c:IsAbleToGraveAsCost()
 end
 function c36328300.exfilter(c,tp)
-	return Duel.GetLocationCountFromEx(tp,tp,Group.FromCards(c))>0
+	return Duel.GetLocationCountFromEx(tp,tp,c,TYPE_FUSION)>0
+end
+function c36328300.gselect(g,tp)
+	return Duel.GetLocationCountFromEx(tp,tp,g,TYPE_FUSION)>0
 end
 function c36328300.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(c36328300.cfilter,tp,LOCATION_ONFIELD+LOCATION_HAND+LOCATION_DECK,0,nil)
 	if chk==0 then return g:GetClassCount(Card.GetCode)>=7
-		and (Duel.GetLocationCountFromEx(tp)>0 or g:IsExists(c36328300.exfilter,1,nil,tp)) end
-	local rg=Group.CreateGroup()
-	local ft=Duel.GetLocationCountFromEx(tp)
-	for i=1,7 do
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-		local tc=nil
-		if ft<1 then
-			tc=g:FilterSelect(tp,c36328300.exfilter,1,1,nil,tp):GetFirst()
-			ft=1
-		else
-			tc=g:Select(tp,1,1,nil):GetFirst()
-		end
-		if tc then
-			rg:AddCard(tc)
-			g:Remove(Card.IsCode,nil,tc:GetCode())
-		end
-	end
+		and (Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_FUSION)>0 or g:IsExists(c36328300.exfilter,1,nil,tp)) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	aux.GCheckAdditional=aux.dncheck
+	local rg=g:SelectSubGroup(tp,c36328300.gselect,false,7,7,tp)
+	aux.GCheckAdditional=nil
 	Duel.SendtoGrave(rg,REASON_COST)
 end
 function c36328300.filter(c,e,tp)
-	return c:IsType(TYPE_FUSION) and c:IsSetCard(0x2034) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false)
+	return c:IsType(TYPE_FUSION) and c:IsSetCard(0x2034) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false) and c:CheckFusionMaterial()
 end
 function c36328300.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return aux.MustMaterialCheck(nil,tp,EFFECT_MUST_BE_FMATERIAL)
@@ -65,12 +56,14 @@ function c36328300.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c36328300.activate(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCountFromEx(tp)<=0 or not aux.MustMaterialCheck(nil,tp,EFFECT_MUST_BE_FMATERIAL) then return end
+	if Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_FUSION)<=0 or not aux.MustMaterialCheck(nil,tp,EFFECT_MUST_BE_FMATERIAL) then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c36328300.filter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
-	if g:GetCount()>0 then
-		Duel.SpecialSummon(g,SUMMON_TYPE_FUSION,tp,tp,false,false,POS_FACEUP)
-		g:GetFirst():CompleteProcedure()
+	local tc=g:GetFirst()
+	if tc then
+		tc:SetMaterial(nil)
+		Duel.SpecialSummon(tc,SUMMON_TYPE_FUSION,tp,tp,false,false,POS_FACEUP)
+		tc:CompleteProcedure()
 	end
 end
 function c36328300.plcfilter(c,tp)
@@ -107,6 +100,5 @@ function c36328300.plop(e,tp,eg,ep,ev,re,r,rp)
 			tc:RegisterEffect(e1)
 			tc=g:GetNext()
 		end
-		Duel.RaiseEvent(g,EVENT_CUSTOM+47408488,e,0,tp,0,0)
 	end
 end

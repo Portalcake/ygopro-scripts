@@ -25,7 +25,7 @@ function c4538826.initial_effect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
 	e3:SetCode(EFFECT_SPSUMMON_PROC)
 	e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e3:SetCountLimit(1,4538827)
+	e3:SetCountLimit(1,4538827+EFFECT_COUNT_CODE_OATH)
 	e3:SetRange(LOCATION_EXTRA+LOCATION_HAND)
 	e3:SetCondition(c4538826.spcon)
 	e3:SetOperation(c4538826.spop)
@@ -78,7 +78,7 @@ function c4538826.spcon(e,c)
 	if c==nil then return true end
 	local tp=c:GetControler()
 	return ((c:IsLocation(LOCATION_HAND) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0) or
-		(c:IsLocation(LOCATION_EXTRA) and Duel.GetLocationCountFromEx(tp)>0))
+		(c:IsLocation(LOCATION_EXTRA) and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0))
 		and Duel.IsExistingMatchingCard(c4538826.spfilter,tp,LOCATION_GRAVE,0,1,nil,ATTRIBUTE_LIGHT)
 		and Duel.IsExistingMatchingCard(c4538826.spfilter,tp,LOCATION_GRAVE,0,1,nil,ATTRIBUTE_DARK)
 end

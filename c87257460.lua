@@ -49,26 +49,24 @@ function c87257460.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
 	if tc:IsFaceup() and tc:IsRelateToEffect(e) then
-		if c:IsFaceup() and c:IsRelateToEffect(e) then
-			if not Duel.Equip(tp,tc,c,false) then return end
-			--Add Equip limit
-			tc:RegisterFlagEffect(87257460,RESET_EVENT+RESETS_STANDARD,0,0)
-			e:SetLabelObject(tc)
-			local e1=Effect.CreateEffect(c)
-			e1:SetType(EFFECT_TYPE_SINGLE)
-			e1:SetProperty(EFFECT_FLAG_COPY_INHERIT+EFFECT_FLAG_OWNER_RELATE)
-			e1:SetCode(EFFECT_EQUIP_LIMIT)
-			e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-			e1:SetValue(c87257460.eqlimit)
-			tc:RegisterEffect(e1)
-			local e2=Effect.CreateEffect(c)
-			e2:SetType(EFFECT_TYPE_EQUIP)
-			e2:SetCode(EFFECT_DESTROY_SUBSTITUTE)
-			e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_OWNER_RELATE)
-			e2:SetReset(RESET_EVENT+RESETS_STANDARD)
-			e2:SetValue(c87257460.repval)
-			tc:RegisterEffect(e2)
-		else Duel.SendtoGrave(tc,REASON_RULE) end
+		if not Duel.Equip(tp,tc,c,false) then return end
+		--Add Equip limit
+		tc:RegisterFlagEffect(87257460,RESET_EVENT+RESETS_STANDARD,0,0)
+		e:SetLabelObject(tc)
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetProperty(EFFECT_FLAG_COPY_INHERIT+EFFECT_FLAG_OWNER_RELATE)
+		e1:SetCode(EFFECT_EQUIP_LIMIT)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		e1:SetValue(c87257460.eqlimit)
+		tc:RegisterEffect(e1)
+		local e2=Effect.CreateEffect(c)
+		e2:SetType(EFFECT_TYPE_EQUIP)
+		e2:SetCode(EFFECT_DESTROY_SUBSTITUTE)
+		e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_OWNER_RELATE)
+		e2:SetReset(RESET_EVENT+RESETS_STANDARD)
+		e2:SetValue(c87257460.repval)
+		tc:RegisterEffect(e2)
 	end
 end
 function c87257460.repval(e,re,r,rp)
@@ -83,7 +81,7 @@ function c87257460.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoGrave(e:GetHandler(),REASON_COST)
 end
 function c87257460.spfilter(c,e,tp)
-	return c:IsCode(23756165) and c:IsCanBeSpecialSummoned(e,1,tp,true,false)
+	return c:IsCode(23756165) and c:IsCanBeSpecialSummoned(e,SUMMON_VALUE_LV,tp,true,false)
 end
 function c87257460.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>-1
@@ -96,7 +94,7 @@ function c87257460.spop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,c87257460.spfilter,tp,LOCATION_HAND+LOCATION_DECK,0,1,1,nil,e,tp)
 	local tc=g:GetFirst()
 	if tc then
-		Duel.SpecialSummon(tc,1,tp,tp,true,false,POS_FACEUP)
+		Duel.SpecialSummon(tc,SUMMON_VALUE_LV,tp,tp,true,false,POS_FACEUP)
 		tc:CompleteProcedure()
 	end
 end

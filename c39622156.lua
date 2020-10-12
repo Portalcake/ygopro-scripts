@@ -54,19 +54,20 @@ function c39622156.daop(e,tp,eg,ep,ev,re,r,rp)
 	e3:SetCode(EFFECT_IGNORE_BATTLE_TARGET)
 	e3:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
 	e3:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
+	e3:SetValue(aux.imval1)
 	e3:SetReset(RESET_PHASE+PHASE_BATTLE)
 	Duel.RegisterEffect(e3,tp)
 end
 function c39622156.atkcon(e)
-	return e:GetHandler():GetFlagEffect(39622156)~=0
+	return Duel.GetFlagEffect(e:GetHandlerPlayer(),39622156)~=0
 end
 function c39622156.atktg(e,c)
 	return c:GetFieldID()~=e:GetLabel()
 end
 function c39622156.checkop(e,tp,eg,ep,ev,re,r,rp)
-	if e:GetHandler():GetFlagEffect(39622156)~=0 then return end
+	if Duel.GetFlagEffect(tp,39622156)~=0 then return end
 	local fid=eg:GetFirst():GetFieldID()
-	e:GetHandler():RegisterFlagEffect(39622156,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1)
+	Duel.RegisterFlagEffect(tp,39622156,RESET_PHASE+PHASE_BATTLE,0,1)
 	e:GetLabelObject():SetLabel(fid)
 end
 function c39622156.condition(e,tp,eg,ep,ev,re,r,rp)

@@ -5,6 +5,7 @@ function c71612253.initial_effect(c)
 	c:EnableReviveLimit()
 	--atk & def
 	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(71612253,1))
 	e1:SetCategory(CATEGORY_ATKCHANGE+CATEGORY_DEFCHANGE+CATEGORY_DAMAGE)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
@@ -45,7 +46,7 @@ function c71612253.checkop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c71612253.condition(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetFlagEffect(tp,71612253)~=0 and (Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated())
+	return Duel.GetFlagEffect(tp,71612253)~=0 and aux.dscon()
 end
 function c71612253.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end

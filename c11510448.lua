@@ -32,7 +32,7 @@ function c11510448.ovfilter(c)
 end
 function c11510448.xyzop(e,tp,chk)
 	if chk==0 then return Duel.GetFlagEffect(tp,11510448)==0 end
-	Duel.RegisterFlagEffect(tp,11510448,RESET_PHASE+PHASE_END,0,1)
+	Duel.RegisterFlagEffect(tp,11510448,RESET_PHASE+PHASE_END,EFFECT_FLAG_OATH,1)
 end
 function c11510448.atkfilter(c)
 	return c:IsSetCard(0xf1) and c:GetAttack()>=0
@@ -56,7 +56,7 @@ function c11510448.filter1(c)
 	return c:IsFaceup() and c:IsType(TYPE_XYZ)
 end
 function c11510448.filter2(c)
-	return c:IsSetCard(0xf1) and c:IsType(TYPE_MONSTER)
+	return c:IsSetCard(0xf1) and c:IsType(TYPE_MONSTER) and c:IsCanOverlay()
 end
 function c11510448.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end

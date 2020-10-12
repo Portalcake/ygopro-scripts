@@ -39,10 +39,10 @@ function c27062594.activate(e,tp,eg,ep,ev,re,r,rp)
 	if not c:IsRelateToEffect(e)
 		or not Duel.IsPlayerCanSpecialSummonMonster(tp,27062594,0,0x21,0,0,1,RACE_FIEND,ATTRIBUTE_LIGHT) then return end
 	c:AddMonsterAttribute(TYPE_EFFECT+TYPE_TRAP)
-	Duel.SpecialSummon(c,1,tp,tp,true,false,POS_FACEUP)
+	Duel.SpecialSummon(c,SUMMON_VALUE_SELF,tp,tp,true,false,POS_FACEUP)
 end
 function c27062594.damcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():GetSummonType()==SUMMON_TYPE_SPECIAL+1 and Duel.GetTurnPlayer()==tp
+	return e:GetHandler():GetSummonType()==SUMMON_TYPE_SPECIAL+SUMMON_VALUE_SELF and Duel.GetTurnPlayer()==tp
 end
 function c27062594.cfilter(c)
 	return c:IsSetCard(0x107f) and c:IsAbleToRemoveAsCost()
@@ -50,13 +50,8 @@ end
 function c27062594.damcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c27062594.cfilter,tp,LOCATION_GRAVE,0,1,nil) end
 	local g=Duel.GetMatchingGroup(c27062594.cfilter,tp,LOCATION_GRAVE,0,nil)
-	local rg=Group.CreateGroup()
-	repeat
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local sg=g:Select(tp,1,1,nil)
-		g:Remove(Card.IsCode,nil,sg:GetFirst():GetCode())
-		rg:Merge(sg)
-	until g:GetCount()==0 or not Duel.SelectYesNo(tp,aux.Stringid(27062594,1))
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+	local rg=g:SelectSubGroup(tp,aux.dncheck,false,1,g:GetCount())
 	local ct=Duel.Remove(rg,POS_FACEUP,REASON_COST)
 	e:SetLabel(ct)
 end

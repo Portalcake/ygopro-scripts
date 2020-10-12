@@ -11,7 +11,7 @@ function c35842855.initial_effect(c)
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetCode(EFFECT_SPSUMMON_PROC)
-	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e2:SetRange(LOCATION_HAND)
 	e2:SetCondition(c35842855.spcon)
 	c:RegisterEffect(e2)
@@ -50,7 +50,7 @@ end
 function c35842855.desop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) and Duel.Destroy(tc,REASON_EFFECT)==1 then
-		local atk=tc:GetTextAttack()/2
+		local atk=math.floor(tc:GetTextAttack()/2)
 		if atk>0 then
 			Duel.Damage(tp,atk,REASON_EFFECT,true)
 			Duel.Damage(1-tp,atk,REASON_EFFECT,true)

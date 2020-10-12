@@ -1,5 +1,6 @@
 --黒魔導強化
 function c111280.initial_effect(c)
+	aux.AddCodeList(c,46986414,38033121)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_ATKCHANGE)
@@ -12,13 +13,12 @@ function c111280.initial_effect(c)
 	e1:SetOperation(c111280.activate)
 	c:RegisterEffect(e1)
 end
-c111280.card_code_list={46986414,38033121}
 function c111280.cfilter(c)
 	return c:IsFaceup() and c:IsCode(46986414,38033121)
 end
 function c111280.condition(e,tp,eg,ep,ev,re,r,rp)
 	local ct=Duel.GetMatchingGroupCount(c111280.cfilter,tp,LOCATION_ONFIELD+LOCATION_GRAVE,LOCATION_ONFIELD+LOCATION_GRAVE,nil)
-	return ct>0 and (Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated())
+	return ct>0 and aux.dscon()
 end
 function c111280.filter(c)
 	return c:IsFaceup() and c:IsRace(RACE_SPELLCASTER) and c:IsAttribute(ATTRIBUTE_DARK)

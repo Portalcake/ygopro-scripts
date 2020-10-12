@@ -25,7 +25,7 @@ function c70335319.initial_effect(c)
 	e3:SetCode(EFFECT_SPSUMMON_PROC)
 	e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e3:SetRange(LOCATION_HAND)
-	e3:SetCountLimit(1,70335319)
+	e3:SetCountLimit(1,70335319+EFFECT_COUNT_CODE_OATH)
 	e3:SetCondition(c70335319.hspcon)
 	e3:SetOperation(c70335319.hspop)
 	c:RegisterEffect(e3)
@@ -159,7 +159,5 @@ function c70335319.negtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
 end
 function c70335319.negop(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.NegateActivation(ev) and re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:GetHandler():IsRelateToEffect(re) then
-		Duel.SendtoGrave(eg,REASON_EFFECT)
-	end
+	Duel.NegateActivation(ev)
 end

@@ -42,21 +42,20 @@ function c10443957.ovfilter(c)
 end
 function c10443957.xyzop(e,tp,chk)
 	if chk==0 then return Duel.GetFlagEffect(tp,10443957)==0 end
-	Duel.RegisterFlagEffect(tp,10443957,RESET_PHASE+PHASE_END,0,1)
+	Duel.RegisterFlagEffect(tp,10443957,RESET_PHASE+PHASE_END,EFFECT_FLAG_OATH,1)
 end
 function c10443957.atkval(e,c)
 	return c:GetOverlayCount()*200
 end
-function c10443957.filter(c,tp)
-	return c:IsPosition(POS_FACEUP_ATTACK) and not c:IsType(TYPE_TOKEN)
-		and (c:IsControler(tp) or c:IsAbleToChangeControler())
+function c10443957.filter(c)
+	return c:IsPosition(POS_FACEUP_ATTACK) and c:IsCanOverlay()
 end
 function c10443957.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and c10443957.filter(chkc,tp) and chkc~=e:GetHandler() end
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and c10443957.filter(chkc) and chkc~=e:GetHandler() end
 	if chk==0 then return e:GetHandler():IsType(TYPE_XYZ)
-		and Duel.IsExistingTarget(c10443957.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,e:GetHandler(),tp) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
-	Duel.SelectTarget(tp,c10443957.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,e:GetHandler(),tp)
+		and Duel.IsExistingTarget(c10443957.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,e:GetHandler()) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
+	Duel.SelectTarget(tp,c10443957.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,e:GetHandler())
 end
 function c10443957.operation(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

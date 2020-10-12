@@ -6,7 +6,7 @@ function c15521027.initial_effect(c)
 	e1:SetDescription(aux.Stringid(15521027,0))
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_SPSUMMON_PROC)
-	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetCondition(c15521027.spcon)
 	e1:SetOperation(c15521027.spop)
@@ -33,6 +33,7 @@ function c15521027.initial_effect(c)
 	e3:SetOperation(c15521027.opd)
 	c:RegisterEffect(e3)
 end
+c15521027.toss_dice=true
 function c15521027.spfilter(c)
 	return c:IsSetCard(0x26) and c:IsType(TYPE_MONSTER) and c:IsAbleToRemoveAsCost()
 end

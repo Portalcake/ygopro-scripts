@@ -5,7 +5,7 @@ function c63789924.initial_effect(c)
 	e1:SetCategory(CATEGORY_EQUIP)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_CONTINUOUS_TARGET)
 	e1:SetTarget(c63789924.target)
 	e1:SetOperation(c63789924.operation)
 	c:RegisterEffect(e1)
@@ -42,7 +42,7 @@ function c63789924.operation(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c63789924.discon(e,tp,eg,ep,ev,re,r,rp)
-	return bit.band(r,0x41)==0x41 and e:GetHandler():GetEquipTarget()~=nil and e:GetHandler():IsLocation(LOCATION_GRAVE)
+	return bit.band(r,0x41)==0x41 and e:GetHandler():GetEquipTarget()~=nil
 end
 function c63789924.distg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
