@@ -32,14 +32,14 @@ function c8522996.initial_effect(c)
 end
 function c8522996.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,8522996,0,0x21,1000,2400,6,RACE_FIEND,ATTRIBUTE_DARK) end
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,8522996,0,TYPES_EFFECT_TRAP_MONSTER,1000,2400,6,RACE_FIEND,ATTRIBUTE_DARK) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,e:GetHandler(),1,0,0)
 end
 function c8522996.activate(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) then return end
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0
-		or not Duel.IsPlayerCanSpecialSummonMonster(tp,8522996,0,0x21,1000,2400,6,RACE_FIEND,ATTRIBUTE_DARK) then return end
+		or not Duel.IsPlayerCanSpecialSummonMonster(tp,8522996,0,TYPES_EFFECT_TRAP_MONSTER,1000,2400,6,RACE_FIEND,ATTRIBUTE_DARK) then return end
 	c:AddMonsterAttribute(TYPE_EFFECT+TYPE_TRAP)
 	Duel.SpecialSummon(c,SUMMON_VALUE_SELF,tp,tp,true,false,POS_FACEUP)
 end
@@ -53,7 +53,7 @@ end
 function c8522996.chtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATTRIBUTE)
-	local aat=Duel.AnnounceAttribute(tp,1,0x7f)
+	local aat=Duel.AnnounceAttribute(tp,1,ATTRIBUTE_ALL)
 	e:SetLabel(aat)
 end
 function c8522996.chop(e,tp,eg,ep,ev,re,r,rp)
@@ -78,5 +78,5 @@ function c8522996.condition(e,c)
 	return c:IsAttribute(e:GetHandler():GetAttribute())
 end
 function c8522996.splimit(e,c,tp,sumtp,sumpos)
-	return c:IsAttribute(0xff-e:GetHandler():GetAttribute())
+	return c:IsAttribute(ATTRIBUTE_ALL-e:GetHandler():GetAttribute())
 end

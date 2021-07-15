@@ -6,6 +6,7 @@ function c23020408.initial_effect(c)
 	e1:SetDescription(aux.Stringid(23020408,0))
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetHintTiming(0,TIMING_END_PHASE)
 	e1:SetTarget(c23020408.target)
 	e1:SetOperation(c23020408.activate)
 	c:RegisterEffect(e1)
@@ -35,6 +36,7 @@ function c23020408.activate(e,tp,eg,ep,ev,re,r,rp)
 	local tc=g:GetFirst()
 	if tc then
 		Duel.ShuffleDeck(tp)
+		Duel.HintSelection(g)
 		if tc:IsLocation(LOCATION_DECK) then
 			Duel.MoveSequence(tc,0)
 		else

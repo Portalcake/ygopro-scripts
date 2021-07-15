@@ -3,7 +3,7 @@ function c49966326.initial_effect(c)
 	--spsummon
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(49966326,0))
-	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_TOGRAVE)
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_TOGRAVE+CATEGORY_DECKDES)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_HAND)
@@ -35,7 +35,7 @@ end
 function c49966326.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c,tc=e:GetHandler(),Duel.GetFirstTarget()
 	local type1=tc:GetType()&0x7
-	if tc:IsRelateToEffect(e) and tc:IsFaceup() then
+	if tc:IsRelateToEffect(e) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 		local g=Duel.SelectMatchingCard(tp,c49966326.tgfilter,tp,LOCATION_DECK,0,1,1,nil,type1)
 		local tgc=g:GetFirst()

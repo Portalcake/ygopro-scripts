@@ -4,13 +4,7 @@ function c60110982.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.AddFusionProcCode3(c,6007213,32491822,69890967,true,true)
 	--change name
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e1:SetCode(EFFECT_CHANGE_CODE)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetValue(43378048)
-	c:RegisterEffect(e1)
+	aux.EnableChangeCode(c,43378048)
 	--control
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(60110982,0))
@@ -61,7 +55,6 @@ function c60110982.rmtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,LOCATION_ONFIELD,0,nil)
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,g:GetCount(),0,0)
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,0,e:GetHandler():GetOwner(),LOCATION_EXTRA)
 end
 function c60110982.spfilter(c,e,p)
 	return c:IsCode(43378048) and c:IsCanBeSpecialSummoned(e,0,p,true,false) and Duel.GetLocationCountFromEx(p,p,nil,c)>0

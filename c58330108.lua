@@ -74,9 +74,9 @@ function c58330108.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	local gc=Duel.GetMatchingGroup(c58330108.filter,tp,LOCATION_GRAVE,0,nil):GetClassCount(Card.GetCode)
 	if chk==0 then
 		local b1=Duel.IsExistingMatchingCard(nil,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,c)
-		local b2=Duel.IsExistingMatchingCard(Card.IsAbleToRemove,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,c) 
+		local b2=Duel.IsExistingMatchingCard(Card.IsAbleToRemove,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,c)
 			and not Duel.IsExistingMatchingCard(aux.NOT(Card.IsAbleToRemove),tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,c)
-		local b3=Duel.IsExistingMatchingCard(Card.IsAbleToRemove,tp,LOCATION_ONFIELD+LOCATION_GRAVE,LOCATION_ONFIELD+LOCATION_GRAVE,1,c) 
+		local b3=Duel.IsExistingMatchingCard(Card.IsAbleToRemove,tp,LOCATION_ONFIELD+LOCATION_GRAVE,LOCATION_ONFIELD+LOCATION_GRAVE,1,c)
 			and not Duel.IsExistingMatchingCard(aux.NOT(Card.IsAbleToRemove),tp,LOCATION_ONFIELD+LOCATION_GRAVE,LOCATION_ONFIELD+LOCATION_GRAVE,1,c)
 		return (gc==1 and b1) or (gc==2 and b2) or (gc>2 and b3)
 	end
@@ -97,7 +97,7 @@ function c58330108.operation(e,tp,eg,ep,ev,re,r,rp)
 	if gc==1 then
 		local g=Duel.GetMatchingGroup(nil,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,aux.ExceptThisCard(e))
 		Duel.Destroy(g,REASON_EFFECT)
-	else
+	elseif gc>=2 then
 		local loc=LOCATION_ONFIELD
 		if gc>2 then loc=LOCATION_ONFIELD+LOCATION_GRAVE end
 		local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,loc,loc,aux.ExceptThisCard(e))

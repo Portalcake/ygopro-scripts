@@ -28,12 +28,12 @@ function c57043986.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function c57043986.negfilter(c)
-	return c:IsType(TYPE_MONSTER) and aux.disfilter1(c)
+	return c:IsType(TYPE_MONSTER) and aux.NegateMonsterFilter(c)
 end
 function c57043986.negtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsOnField() and c57043986.negfilter(chkc) end
 	if chk==0 then return Duel.IsExistingTarget(c57043986.negfilter,tp,0,LOCATION_MZONE,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISABLE)
 	local g=Duel.SelectTarget(tp,c57043986.negfilter,tp,0,LOCATION_MZONE,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_DISABLE,g,1,0,0)
 end

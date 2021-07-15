@@ -17,11 +17,11 @@ function c63442604.condition(e,tp,eg,ep,ev,re,r,rp)
 end
 function c63442604.cfilter(c,tp)
 	return c:IsFaceup() and c:GetLevel()>0
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,63442605,0,0x4011,c:GetAttack(),c:GetDefense(),c:GetLevel(),c:GetRace(),c:GetAttribute())
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,63442605,0,TYPES_TOKEN_MONSTER,c:GetAttack(),c:GetDefense(),c:GetLevel(),c:GetRace(),c:GetAttribute())
 end
 function c63442604.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and c63442604.cfilter(chkc,tp) end
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and 
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and
 		Duel.IsExistingTarget(c63442604.cfilter,tp,0,LOCATION_MZONE,1,nil,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
 	local g=Duel.SelectTarget(tp,c63442604.cfilter,tp,0,LOCATION_MZONE,1,1,nil,tp)
@@ -32,7 +32,7 @@ function c63442604.activate(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if not tc:IsRelateToEffect(e) or tc:IsFacedown() then return end
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0
-		or not Duel.IsPlayerCanSpecialSummonMonster(tp,63442605,0,0x4011,tc:GetAttack(),tc:GetDefense(),
+		or not Duel.IsPlayerCanSpecialSummonMonster(tp,63442605,0,TYPES_TOKEN_MONSTER,tc:GetAttack(),tc:GetDefense(),
 			tc:GetLevel(),tc:GetRace(),tc:GetAttribute()) then return end
 	local token=Duel.CreateToken(tp,63442605)
 	local e1=Effect.CreateEffect(e:GetHandler())

@@ -1,4 +1,4 @@
---The Chaos Creator
+--混沌の創世神
 function c90488465.initial_effect(c)
 	c:EnableReviveLimit()
 	--special summon
@@ -40,7 +40,7 @@ function c90488465.spop(e,tp,eg,ep,ev,re,r,rp,c)
 	Duel.Remove(sg,POS_FACEUP,REASON_COST)
 end
 function c90488465.tdcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():IsSummonType(SUMMON_TYPE_SPECIAL) and e:GetHandler():GetPreviousLocation()==LOCATION_HAND
+	return e:GetHandler():IsSummonType(SUMMON_TYPE_SPECIAL) and e:GetHandler():IsPreviousLocation(LOCATION_HAND)
 end
 function c90488465.tdfilter(c,e,tp)
 	return c:IsFaceup() and c:IsType(TYPE_MONSTER) and c:IsCanBeEffectTarget(e)

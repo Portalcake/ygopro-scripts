@@ -48,7 +48,7 @@ function c25704359.atkcon(e)
 end
 function c25704359.cfilter(c,tp)
 	return c:IsReason(REASON_BATTLE+REASON_EFFECT) and c:GetOriginalAttribute()~=0
-		and c:IsPreviousLocation(LOCATION_MZONE) and c:GetPreviousControler()==tp
+		and c:IsPreviousLocation(LOCATION_MZONE) and c:IsPreviousControler(tp)
 end
 function c25704359.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(c25704359.cfilter,1,nil,tp) and e:GetHandler():IsStatus(STATUS_EFFECT_ENABLED)
@@ -61,13 +61,13 @@ function c25704359.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return false end
 		local g=eg:Filter(c25704359.cfilter,nil,tp)
-		local att=0x7f
+		local att=ATTRIBUTE_ALL
 		local tc=g:GetFirst()
 		while tc do
 			att=bit.band(att,tc:GetOriginalAttribute())
 			tc=g:GetNext()
 		end
-		att=0x7f-att
+		att=ATTRIBUTE_ALL-att
 		e:SetLabel(att)
 		return Duel.IsExistingMatchingCard(c25704359.spfilter,tp,LOCATION_DECK,0,1,nil,e,tp,att)
 	end

@@ -39,7 +39,7 @@ function c1644289.eqlimit(e,c)
 	return c:IsSetCard(0x30)
 end
 function c1644289.tglimit(e,re,rp)
-	return rp==1-e:GetHandlerPlayer() and re:IsActiveType(TYPE_TRAP+TYPE_MONSTER) 
+	return rp==1-e:GetHandlerPlayer() and re:IsActiveType(TYPE_TRAP+TYPE_MONSTER)
 end
 function c1644289.filter(c)
 	return c:IsFaceup() and c:IsSetCard(0x30)
@@ -59,8 +59,8 @@ function c1644289.operation(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c1644289.thcon(e,tp,eg,ep,ev,re,r,rp)
-	return bit.band(e:GetHandler():GetPreviousPosition(),POS_FACEUP)~=0
-		and bit.band(e:GetHandler():GetPreviousLocation(),LOCATION_ONFIELD)~=0
+	return e:GetHandler():IsPreviousPosition(POS_FACEUP)
+		and e:GetHandler():IsPreviousLocation(LOCATION_ONFIELD)
 end
 function c1644289.thfilter(c)
 	return c:IsSetCard(0x30) and c:IsType(TYPE_SPELL) and c:IsAbleToHand()

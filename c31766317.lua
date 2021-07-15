@@ -36,11 +36,11 @@ function c31766317.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 	else return false end
 end
 function c31766317.spcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():IsReason(REASON_DESTROY) and bit.band(e:GetHandler():GetPreviousLocation(),LOCATION_ONFIELD)~=0
+	return e:GetHandler():IsReason(REASON_DESTROY) and e:GetHandler():IsPreviousLocation(LOCATION_ONFIELD)
 end
 function c31766317.filter(c,e,tp)
 	return c:IsRace(RACE_FIEND) and c:IsAttribute(ATTRIBUTE_DARK) and c:IsLevelAbove(6)
-		and c:GetCode()~=31766317 and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+		and not c:IsCode(31766317) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c31766317.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c31766317.filter(chkc,e,tp) end

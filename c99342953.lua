@@ -25,6 +25,7 @@ function c99342953.initial_effect(c)
 	e3:SetOperation(c99342953.spop)
 	c:RegisterEffect(e3)
 end
+c99342953.counter_add_list={0x100e}
 function c99342953.ctfilter(c)
 	return c:IsPreviousLocation(LOCATION_MZONE) and c:IsPreviousPosition(POS_FACEUP) and c:IsPreviousSetCard(0xc)
 end
@@ -32,7 +33,7 @@ function c99342953.ctcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(c99342953.ctfilter,1,nil)
 end
 function c99342953.ctop(e,tp,eg,ep,ev,re,r,rp)
-	e:GetHandler():AddCounter(COUNTER_NEED_ENABLE+0x100e,1)
+	e:GetHandler():AddCounter(0x100e,1)
 end
 function c99342953.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsCanRemoveCounter(tp,1,1,0x100e,2,REASON_COST) end

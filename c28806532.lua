@@ -32,7 +32,7 @@ function c28806532.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function c28806532.tfcfilter(c,tp)
-	return c:IsPreviousPosition(POS_FACEUP) and c:IsPreviousSetCard(0x109) and c:IsPreviousLocation(LOCATION_ONFIELD) and c:GetPreviousControler()==tp
+	return c:IsPreviousPosition(POS_FACEUP) and c:IsPreviousSetCard(0x109) and c:IsPreviousLocation(LOCATION_ONFIELD) and c:IsPreviousControler(tp)
 end
 function c28806532.tfcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(c28806532.tfcfilter,1,e:GetHandler(),tp)
@@ -66,7 +66,7 @@ function c28806532.spreg(e,tp,eg,ep,ev,re,r,rp)
 	if not re then return end
 	local c=e:GetHandler()
 	local rc=re:GetHandler()
-	if c:IsReason(REASON_COST) and rc:IsSetCard(0x109) then
+	if c:IsReason(REASON_COST) and rc:IsSetCard(0x109) and c:IsPreviousLocation(LOCATION_ONFIELD) and re:IsActivated() then
 		e:SetLabel(Duel.GetTurnCount()+1)
 		c:RegisterFlagEffect(28806532,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,2)
 	end

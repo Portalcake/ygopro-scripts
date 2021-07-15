@@ -22,6 +22,7 @@ function c71921856.initial_effect(c)
 	c:RegisterEffect(e2)
 	--spsummon
 	local e3=Effect.CreateEffect(c)
+	e3:SetDescription(aux.Stringid(71921856,1))
 	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e3:SetCode(EVENT_TO_GRAVE)
@@ -56,7 +57,7 @@ function c71921856.spcon(e,tp,eg,ep,ev,re,r,rp)
 	local ct=c:GetOverlayCount()
 	e:SetLabel(ct)
 	return c:IsReason(REASON_DESTROY) and c:GetReasonPlayer()==1-tp
-		and c:IsPreviousLocation(LOCATION_MZONE) and c:GetPreviousControler()==tp and ct>0
+		and c:IsPreviousLocation(LOCATION_MZONE) and c:IsPreviousControler(tp) and ct>0
 end
 function c71921856.spfilter(c,e,tp)
 	return c:IsLevelBelow(4) and c:IsSetCard(0x84) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
